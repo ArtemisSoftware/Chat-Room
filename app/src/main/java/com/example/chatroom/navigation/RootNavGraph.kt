@@ -5,20 +5,35 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.chatroom.feature.authentication.signin.SignInScreen
+import com.example.chatroom.feature.authentication.signup.SignUpScreen
 import com.example.chatroom.navigation.routes.SignInRoute
+import com.example.chatroom.navigation.routes.SignUpRoute
 
 @Composable
 fun RootNavGraph(
-    startDestination: String = "",
+    startDestination: Any = SignInRoute,
     navController: NavHostController
 ) {
     NavHost(
         navController = navController,
-        startDestination = SignInRoute
+        startDestination = startDestination
     ) {
         composable<SignInRoute> {
             SignInScreen(
-                navigateTo = {
+                navigateToSingUp = {
+                    /*
+                    navController.navigate(ScreenB(
+                        name = null,
+                        age = 25
+                    ))
+
+                     */
+                }
+            )
+        }
+        composable<SignUpRoute> {
+            SignUpScreen(
+                navigateBack = {
                     /*
                     navController.navigate(ScreenB(
                         name = null,
