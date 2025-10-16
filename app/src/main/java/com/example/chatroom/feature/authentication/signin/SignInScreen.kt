@@ -103,7 +103,7 @@ private fun SignInContent(
                 Button(
                     onClick = { event(SignInEvent.SignIn) },
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = state.hasValidCredentials() //(uiState.value == SignInState.Nothing || uiState.value == SignInState.Error)
+                    enabled = state.hasValidCredentials()
                 ) {
                     Text(text = stringResource(R.string.sign_in))
                 }
