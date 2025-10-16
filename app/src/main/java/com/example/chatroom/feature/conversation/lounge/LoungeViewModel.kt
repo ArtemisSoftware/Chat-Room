@@ -23,6 +23,7 @@ class LoungeViewModel constructor(
         when(event){
             LoungeEvent.AddChanel -> addChannel()
             is LoungeEvent.UpdateChannelName -> updateChannelName(event.name)
+            is LoungeEvent.ShowAddChannelDialog -> showAddChannelDialog(event.show)
         }
     }
 
@@ -39,6 +40,10 @@ class LoungeViewModel constructor(
 
     private fun updateChannelName(name: String? = null) = with(_state){
         update { it.copy(newChannel = name) }
+    }
+
+    private fun showAddChannelDialog(show: Boolean) = with(_state){
+        update { it.copy(showChannelDialog = show) }
     }
 
     private fun addChannel() = with(_state.value){
