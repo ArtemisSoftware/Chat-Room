@@ -11,4 +11,5 @@
     <string name="add_channel">Add Channel</string>
     <string name="channel_name">Channel Name</string>
     <string name="add">Add</string>
+    <string name="type_a_message">Type a message</string>
 </resources>
