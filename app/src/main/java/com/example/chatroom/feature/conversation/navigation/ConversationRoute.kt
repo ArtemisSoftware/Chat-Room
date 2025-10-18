@@ -8,5 +8,5 @@ sealed class ConversationRoute {
     object Lounge
 
     @Serializable
-    data class Chatdd(val channelId: String)
+    data class Chat(val channelId: String)
 }

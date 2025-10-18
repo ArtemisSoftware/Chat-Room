@@ -16,7 +16,7 @@ fun NavGraphBuilder.conversationNavGraph(
         LoungeScreen()
     }
 
-    composable<ConversationRoute.Chatdd> {
+    composable<ConversationRoute.Chat> {
         ChatScreen()
     }
 }
