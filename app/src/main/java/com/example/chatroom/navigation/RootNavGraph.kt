@@ -1,49 +1,31 @@
 package com.example.chatroom.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import com.example.chatroom.feature.authentication.signin.SignInScreen
-import com.example.chatroom.feature.authentication.signup.SignUpScreen
-import com.example.chatroom.navigation.routes.SignInRoute
-import com.example.chatroom.navigation.routes.SignUpRoute
+import com.example.chatroom.feature.authentication.navigation.AuthenticationRoute
+import com.example.chatroom.feature.authentication.navigation.authenticationNavGraph
+import com.example.chatroom.feature.conversation.navigation.conversationNavGraph
 
 @Composable
 fun RootNavGraph(
-    startDestination: Any = SignInRoute,
-    navController: NavHostController
+    navController: NavHostController,
+    startDestination: Any = AuthenticationRoute.SignInRoute,
+    modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
+        modifier = modifier
     ) {
-        composable<SignInRoute> {
-            SignInScreen(
-                navigateToSingUp = {
-                    /*
-                    navController.navigate(ScreenB(
-                        name = null,
-                        age = 25
-                    ))
 
-                     */
-                }
-            )
-        }
-        composable<SignUpRoute> {
-            SignUpScreen(
-                navigateBack = {
-                    /*
-                    navController.navigate(ScreenB(
-                        name = null,
-                        age = 25
-                    ))
+        authenticationNavGraph(
+            navController = navController,
+        )
 
-                     */
-                }
-            )
-        }
-
+        conversationNavGraph(
+            navController = navController,
+        )
     }
 }
