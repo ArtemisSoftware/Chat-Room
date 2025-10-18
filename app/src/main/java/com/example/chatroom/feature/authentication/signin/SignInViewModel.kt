@@ -12,7 +12,7 @@ class SignInViewModel constructor(
     private val authenticationRepository: AuthenticationRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<SignInState>(SignInState())
+    private val _state = MutableStateFlow(SignInState())
     val state = _state.asStateFlow()
 
     fun onTriggerEvent(event: SignInEvent){
