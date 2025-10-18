@@ -13,7 +13,9 @@ fun NavGraphBuilder.conversationNavGraph(
 ) {
 
     composable<ConversationRoute.Lounge> {
-        LoungeScreen()
+        LoungeScreen(
+            navigateToChat = {}
+        )
     }
 
     composable<ConversationRoute.Chat> {
