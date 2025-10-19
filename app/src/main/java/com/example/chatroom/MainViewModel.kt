@@ -6,12 +6,15 @@ import com.example.chatroom.domain.repository.AuthenticationRepository
 import com.example.chatroom.feature.authentication.navigation.AuthenticationRoute
 import com.example.chatroom.feature.authentication.signin.SignInState
 import com.example.chatroom.feature.conversation.navigation.ConversationRoute
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel constructor(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val authenticationRepository: AuthenticationRepository
 ): ViewModel() {
 
