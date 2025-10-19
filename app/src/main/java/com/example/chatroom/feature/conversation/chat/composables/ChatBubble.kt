@@ -33,50 +33,50 @@ internal fun ChatBubble(
 ) {
     val alignment = if (!message.isMyMessage) Alignment.CenterStart else Alignment.CenterEnd
 
-        Box(
-            modifier = modifier
-                .padding(vertical = 4.dp, horizontal = 8.dp)
+    Box(
+        modifier = modifier
+            .padding(vertical = 4.dp, horizontal = 8.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(8.dp)
+                .align(alignment),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Row(
+            if (!message.isMyMessage) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_friend),
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp)
+                )
+            }
+
+            Box(
                 modifier = Modifier
                     .padding(8.dp)
-                    .align(alignment),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                if (!message.isMyMessage) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_friend),
-                        contentDescription = null,
-                        modifier = Modifier.size(40.dp)
+                    .background(
+                        color = message.toColor(),
+                        shape = RoundedCornerShape(8.dp)
                     )
-                }
-
-                Box(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .background(
-                            color = message.toColor(),
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                ) {
-                    message.imageUrl?.let {
-                        AsyncImage(
-                            model = it,
-                            contentDescription = null,
-                            modifier = Modifier.size(200.dp),
-                            contentScale = ContentScale.Crop
-                        )
-                    } ?: run {
-                        Text(
-                            text = message.message,
-                            color = Color.White,
-                            modifier = Modifier.padding(12.dp)
-                        )
-                    }
+            ) {
+                message.imageUrl?.let {
+                    AsyncImage(
+                        model = it,
+                        contentDescription = null,
+                        modifier = Modifier.size(200.dp),
+                        contentScale = ContentScale.Crop
+                    )
+                } ?: run {
+                    Text(
+                        text = message.message,
+                        color = Color.White,
+                        modifier = Modifier.padding(12.dp)
+                    )
                 }
             }
         }
+    }
 }
 
 @Preview(showBackground = true)

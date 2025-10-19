@@ -5,7 +5,7 @@ class ChatRepositoryImpl {
     /*
     private val db = Firebase.database
 
-    fun sendMessage(channelID: String, messageText: String) {
+    fun sendMessage(channelID: String, messageText: String?, image: String? = null) {
         val message = Message(
             db.reference.push().key ?: UUID.randomUUID().toString(),
             Firebase.auth.currentUser?.uid ?: "",
@@ -13,10 +13,34 @@ class ChatRepositoryImpl {
             System.currentTimeMillis(),
             Firebase.auth.currentUser?.displayName ?: "",
             null,
-            null
+            image
         )
 
         db.reference.child("messages").child(channelID).push().setValue(message)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    postNotificationToUsers(channelID, message.senderName, messageText ?: "")
+                }
+            }
+    }
+
+
+    fun sendImageMessage(uri: Uri, channelID: String) {
+        val imageRef = Firebase.storage.reference.child("images/${UUID.randomUUID()}")
+        imageRef.putFile(uri).continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            imageRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            val currentUser = Firebase.auth.currentUser
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+                sendMessage(channelID, null, downloadUri.toString())
+            }
+        }
     }
 
 //TODO: to know is the message belongs to user

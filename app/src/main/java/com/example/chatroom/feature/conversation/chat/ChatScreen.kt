@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.chatroom.feature.conversation.chat
 
 import androidx.compose.foundation.background
@@ -7,16 +9,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.chatroom.domain.models.Message
 import com.example.chatroom.feature.conversation.chat.composables.ChatBubble
 import com.example.chatroom.feature.conversation.chat.composables.MessageSender
+import com.example.chatroom.presentation.composables.dialog.ContentSelectionDialog
 import com.example.chatroom.ui.theme.ChatRoomTheme
 
 @Composable
@@ -29,7 +36,14 @@ private fun ChatContent(
     state: ChatState,
     onEvent: (ChatEvent) -> Unit
 ) {
-    Scaffold(modifier = Modifier.fillMaxSize()) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = { Text(state.channelName, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+            )
+        }
+    ) {
 
         Box(modifier = Modifier
             .fillMaxSize()
@@ -55,9 +69,19 @@ private fun ChatContent(
                 message = state.currentMessage,
                 onMessageUpdate = { onEvent(ChatEvent.UpdateMessage(it)) },
                 onSendMessage = { onEvent(ChatEvent.SendMessage) },
-                onAttachementClick = {}
+                onAttachementClick = { onEvent(ChatEvent.ShowContentDialog(true)) }
             )
         }
+    }
+
+    if (state.showMediaContentDialog) {
+        ContentSelectionDialog(
+            onDismiss = { onEvent(ChatEvent.ShowContentDialog(false)) },
+            onSuccessResult = {
+                onEvent(ChatEvent.SendImage(it))
+            }
+
+        )
     }
 }
 
@@ -68,6 +92,7 @@ private fun ChatContentPreview() {
     ChatRoomTheme {
         ChatContent(
             state = ChatState(
+                channelName = "The channel",
                 messages = listOf(
                     Message(
                         isMyMessage = false,

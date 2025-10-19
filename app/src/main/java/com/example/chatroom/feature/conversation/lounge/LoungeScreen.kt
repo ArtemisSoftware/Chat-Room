@@ -2,11 +2,8 @@
 
 package com.example.chatroom.feature.conversation.lounge
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,8 +12,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -25,7 +20,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -46,7 +40,7 @@ import com.example.chatroom.ui.theme.DarkGrey
 
 @Composable
 internal fun LoungeScreen(
-    navigateToChat: (String) -> Unit
+    navigateToChat: (String, String) -> Unit
 ) {
     /*
     val viewModel = hiltViewModel<HomeViewModel>()
@@ -106,7 +100,7 @@ internal fun LoungeScreen(
 @Composable
 private fun LoungeContent(
     state: LoungeState,
-    navigateToChat: (String) -> Unit,
+    navigateToChat: (String, String) -> Unit,
     onEvent: (LoungeEvent) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -179,7 +173,7 @@ private fun LoungeContent(
                             channel = channel,
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            onClick = { navigateToChat(it) },
+                            onClick = { id, name -> navigateToChat(id, name) },
                             shouldShowCallButtons = false,
                         )
                     }
@@ -221,7 +215,7 @@ private fun LoungeContentPreview() {
                     Channel(id = "2", name = "The two channel")
                 )
             ),
-            navigateToChat = {},
+            navigateToChat = {_,_ ->},
         )
     }
 }

@@ -23,13 +23,13 @@ internal fun ChannelCard(
     channel: Channel,
     modifier: Modifier,
     shouldShowCallButtons: Boolean = false,
-    onClick: (String) -> Unit,
+    onClick: (String, String) -> Unit,
     //onCall: (ZegoSendCallInvitationButton) -> Unit
 ) {
 
     Card(
         modifier = modifier,
-        onClick = { onClick(channel.id) }
+        onClick = { onClick(channel.id, channel.name) }
     ) {
         Box(
             modifier = Modifier
@@ -73,7 +73,7 @@ private fun LoungeContentPreview() {
             ),
             modifier = Modifier.fillMaxWidth(),
             shouldShowCallButtons = false,
-            onClick = {}
+            onClick = {_, _ ->}
         )
     }
 }

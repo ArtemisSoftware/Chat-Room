@@ -1,5 +1,6 @@
 package com.example.chatroom.feature.conversation.chat
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatroom.domain.repository.ChatRepository
@@ -26,6 +27,8 @@ class ChatViewModel constructor(
         when(event){
             ChatEvent.SendMessage -> sendMessage()
             is ChatEvent.UpdateMessage -> updateMessage(event.message)
+            is ChatEvent.ShowContentDialog -> showContentDialog(event.show)
+            is ChatEvent.SendImage -> sendImage(event.uri)
         }
     }
 
@@ -46,10 +49,23 @@ class ChatViewModel constructor(
         update { it.copy(currentMessage = text) }
     }
 
+    private fun showContentDialog(show: Boolean) = with(_state){
+        update { it.copy(showMediaContentDialog = show) }
+    }
+
     private fun sendMessage() {
         viewModelScope.launch {
             chatRepository
                 .sendMessage(channelId = channelId, message = _state.value.currentMessage)
+
+            _state.update { it.copy(currentMessage = "") }
+        }
+    }
+
+    private fun sendImage(uri: Uri) {
+        viewModelScope.launch {
+            chatRepository
+                .sendImage(channelId = channelId, uri = uri.toString())
 
             _state.update { it.copy(currentMessage = "") }
         }

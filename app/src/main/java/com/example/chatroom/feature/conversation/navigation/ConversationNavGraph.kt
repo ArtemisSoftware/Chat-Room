@@ -14,7 +14,9 @@ fun NavGraphBuilder.conversationNavGraph(
 
     composable<ConversationRoute.Lounge> {
         LoungeScreen(
-            navigateToChat = {}
+            navigateToChat = { id, name ->
+                navController.navigate(ConversationRoute.Chat(channelId = id, channelName = name))
+            }
         )
     }
 

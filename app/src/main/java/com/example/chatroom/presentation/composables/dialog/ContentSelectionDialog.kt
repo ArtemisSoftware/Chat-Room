@@ -1,5 +1,8 @@
 package com.example.chatroom.presentation.composables.dialog
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -12,25 +15,74 @@ import com.example.chatroom.ui.theme.ChatRoomTheme
 
 @Composable
 fun ContentSelectionDialog(
-    onCameraSelected: () -> Unit,
-    onGallerySelected: () -> Unit,
+    onDismiss: () -> Unit,
+    onSuccessResult: (Uri) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+
+    val cameraImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            /*
+            cameraImageUri.value?.let {
+                viewModel.sendImageMessage(it, channelId)
+            }
+            */
+        }
+    }
+
+    val imageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { onSuccessResult(it) }
+    }
+
+    val permissionLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                //cameraImageLauncher.launch(createImageUri())
+            }
+        }
+
     AlertDialog(
         modifier = modifier,
         onDismissRequest = { },
         confirmButton = {
-            TextButton(onClick = onCameraSelected) {
-                Text(text = stringResource(R.string.camera))
-            }
+            TextButton(
+                onClick = {
+                    onDismiss()
+                    /*
+                    if (navController.context.checkSelfPermission(Manifest.permission.CAMERA) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                        cameraImageLauncher.launch(createImageUri())
+                    } else {
+                        permissionLauncher.launch(Manifest.permission.CAMERA)
+                    }
+*/
+                },
+                content = {
+                    Text(text = stringResource(R.string.camera))
+                }
+            ) 
         },
         dismissButton = {
-            TextButton(onClick = onGallerySelected) {
-                Text(text = stringResource(R.string.gallery))
-            }
+            TextButton(
+                onClick = {
+                    onDismiss()
+                    imageLauncher.launch("image/*")
+                },
+                content = {
+                    Text(text = stringResource(R.string.gallery))
+                }
+            ) 
         },
-        title = { Text(text = stringResource(R.string.select_your_source)) },
-        text = { Text(text = stringResource(R.string.would_you_like_to_pick_an_image_from_the_gallery_or_use_the)) })
+        title = {
+            Text(text = stringResource(R.string.select_your_source))
+        },
+        text = {
+            Text(text = stringResource(R.string.would_you_like_to_pick_an_image_from_the_gallery_or_use_the))
+        }
+    )
 }
 
 @Preview(showBackground = true)
@@ -38,8 +90,8 @@ fun ContentSelectionDialog(
 private fun MessageSenderPreview() {
     ChatRoomTheme {
         ContentSelectionDialog(
-            onCameraSelected = {},
-            onGallerySelected = {}
+            onSuccessResult = {},
+            onDismiss = {},
         )
     }
 }
