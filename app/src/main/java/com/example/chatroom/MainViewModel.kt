@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.chatroom.domain.repository.AuthenticationRepository
 import com.example.chatroom.feature.authentication.navigation.AuthenticationRoute
 import com.example.chatroom.feature.authentication.signin.SignInState
+import com.example.chatroom.feature.conversation.navigation.ConversationRoute
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -26,9 +27,7 @@ class MainViewModel constructor(
             authenticationRepository
                 .isLoggedIn()
                 .onSuccess { isLoggedIn ->
-                    //TODO: mudar o home para route
-                    val route = if (isLoggedIn) "home" else AuthenticationRoute.SignInRoute
-
+                    val route = if (isLoggedIn) ConversationRoute.Lounge else AuthenticationRoute.SignInRoute
                     update { it.copy(destinationAfterSplash = route) }
                 }
         }

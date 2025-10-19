@@ -21,16 +21,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        //TODO: adicionar splash
-        /*
-        installSplashScreen().apply {
-            setKeepVisibleCondition {
-                viewModel.state.value.showSplash
-            }
-        }
-        */
-
         setContent {
             ChatRoomTheme {
                 val navController = rememberNavController()
@@ -44,21 +34,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ChatRoomTheme {
-        Greeting("Android")
     }
 }
