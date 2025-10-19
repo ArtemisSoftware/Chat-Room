@@ -12,4 +12,8 @@
     <string name="channel_name">Channel Name</string>
     <string name="add">Add</string>
     <string name="type_a_message">Type a message</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="select_your_source">Select your source?</string>
+    <string name="would_you_like_to_pick_an_image_from_the_gallery_or_use_the">Would you like to pick an image from the gallery or use the</string>
 </resources>
