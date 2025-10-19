@@ -54,7 +54,8 @@ private fun ChatContent(
                     .background(Color.LightGray),
                 message = state.currentMessage,
                 onMessageUpdate = { onEvent(ChatEvent.UpdateMessage(it)) },
-                onSendMessage = { onEvent(ChatEvent.SendMessage) }
+                onSendMessage = { onEvent(ChatEvent.SendMessage) },
+                onAttachementClick = {}
             )
         }
     }

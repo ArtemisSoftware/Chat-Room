@@ -52,6 +52,8 @@ dependencies {
     implementation(libs.androidx.material3)
 
 
+    implementation(libs.coil)
+
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 

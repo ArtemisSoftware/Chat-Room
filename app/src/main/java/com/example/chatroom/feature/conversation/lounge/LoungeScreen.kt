@@ -13,13 +13,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -27,15 +32,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.chatroom.R
 import com.example.chatroom.domain.models.Channel
 import com.example.chatroom.feature.conversation.lounge.composables.AddChannelDialog
+import com.example.chatroom.feature.conversation.lounge.composables.ChannelCard
 import com.example.chatroom.ui.theme.ChatRoomTheme
+import com.example.chatroom.ui.theme.DarkGrey
 
 @Composable
-internal fun LoungeScreen() {
+internal fun LoungeScreen(
+    navigateToChat: (String) -> Unit
+) {
     /*
     val viewModel = hiltViewModel<HomeViewModel>()
     val channels = viewModel.channels.collectAsState()
@@ -94,6 +106,7 @@ internal fun LoungeScreen() {
 @Composable
 private fun LoungeContent(
     state: LoungeState,
+    navigateToChat: (String) -> Unit,
     onEvent: (LoungeEvent) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
@@ -117,23 +130,58 @@ private fun LoungeContent(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(state.channels) { channel ->
-                        Column {
-                            Card(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                onClick = {
-                                    //navController.navigate("chat/${channel.id}")
-                                }
-                            ) {
-                                Text(text = channel.name,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clip(RoundedCornerShape(16.dp))
-                                        //.background(Color.Red.copy(alpha = 0.3f))
-                                        .padding(16.dp))
+
+                    item {
+                        Text(
+                            text = "Messages",
+                            color = Color.Gray,
+                            style = TextStyle(
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Black
+                            ),
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+
+                    item {
+                        TextField(
+                            value = "",
+                            onValueChange = {},
+                            placeholder = { Text(text = "Search...") },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                                .clip(
+                                    RoundedCornerShape(40.dp)
+                                ),
+                            textStyle = TextStyle(color = Color.LightGray),
+                            colors = TextFieldDefaults.colors().copy(
+                                focusedContainerColor = DarkGrey,
+                                unfocusedContainerColor = DarkGrey,
+                                focusedTextColor = Color.Gray,
+                                unfocusedTextColor = Color.Gray,
+                                focusedPlaceholderColor = Color.Gray,
+                                unfocusedPlaceholderColor = Color.Gray,
+                                focusedIndicatorColor = Color.Gray
+                            ),
+                            trailingIcon = {
+                                Icon(
+                                    imageVector = Icons.Filled.Search,
+                                    contentDescription = null
+                                )
                             }
-                        }
+                        )
+                    }
+
+                    items(state.channels) { channel ->
+
+                        ChannelCard(
+                            channel = channel,
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            onClick = { navigateToChat(it) },
+                            shouldShowCallButtons = false,
+                        )
                     }
                 }
             }
@@ -170,9 +218,10 @@ private fun LoungeContentPreview() {
                 showChannelDialog = false,
                 channels = listOf(
                     Channel(id = "1", name = "The one"),
-                    Channel(id = "2", name = "The one")
+                    Channel(id = "2", name = "The two channel")
                 )
             ),
+            navigateToChat = {},
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.example.chatroom.feature.conversation.chat.composables
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,8 +15,10 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +30,7 @@ internal fun MessageSender(
     message: String,
     onMessageUpdate:(String) -> Unit,
     onSendMessage:() -> Unit,
+    onAttachementClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val hideKeyboardController = LocalSoftwareKeyboardController.current
@@ -35,6 +39,21 @@ internal fun MessageSender(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        IconButton(
+            modifier = Modifier
+                .rotate(45F),
+            onClick = {
+                hideKeyboardController?.hide()
+                onMessageUpdate("")
+                onAttachementClick()
+            },
+            content = {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_attachement),
+                    contentDescription = "send"
+                )
+            }
+        )
 
         TextField(
             value = message,
@@ -44,17 +63,18 @@ internal fun MessageSender(
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
                 onDone = { hideKeyboardController?.hide() }
-            )
+            ),
+            trailingIcon = {
+                IconButton(
+                    onClick = { onSendMessage() }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Send,
+                        contentDescription = ""
+                    )
+                }
+            }
         )
-
-        IconButton(
-            onClick = { onSendMessage() }
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.Send,
-                contentDescription = ""
-            )
-        }
     }
 }
 
@@ -66,7 +86,8 @@ private fun MessageSenderPreview() {
             message = "The message",
             modifier = Modifier.fillMaxWidth(),
             onMessageUpdate = {},
-            onSendMessage = {}
+            onSendMessage = {},
+            onAttachementClick = {},
         )
     }
 }
