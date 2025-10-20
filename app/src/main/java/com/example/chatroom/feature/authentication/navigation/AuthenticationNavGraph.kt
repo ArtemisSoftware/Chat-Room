@@ -12,12 +12,17 @@ fun NavGraphBuilder.authenticationNavGraph(
     navController: NavHostController,
 ) {
 
-    composable<AuthenticationRoute.SignUpRoute> {
-        SignUpScreen {  }
+    composable<AuthenticationRoute.SignUp> {
+        SignUpScreen(
+            navigateToSignIn = {
+                navController.popBackStack()
+            },
+        )
     }
 
-    composable<AuthenticationRoute.SignInRoute> {
-
-        SignInScreen {  }
+    composable<AuthenticationRoute.SignIn> {
+        SignInScreen(
+            navigateToSingUp = { navController.navigate(AuthenticationRoute.SignUp) },
+        )
     }
 }

@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 sealed class AuthenticationRoute {
 
     @Serializable
-    object SignInRoute
+    object SignIn
 
     @Serializable
-    object SignUpRoute
+    object SignUp
 }

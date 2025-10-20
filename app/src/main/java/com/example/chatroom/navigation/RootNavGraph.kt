@@ -11,7 +11,7 @@ import com.example.chatroom.feature.conversation.navigation.conversationNavGraph
 @Composable
 fun RootNavGraph(
     navController: NavHostController,
-    startDestination: Any = AuthenticationRoute.SignInRoute,
+    startDestination: Any = AuthenticationRoute.SignIn,
     modifier: Modifier = Modifier
 ) {
     NavHost(

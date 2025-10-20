@@ -7,6 +7,6 @@ data class SignUpState(
     val passwordConfirm: String = "",
     val isLoading: Boolean = false
 ) {
-    fun hasValidPasswords() = password.isNotEmpty() && passwordConfirm.isNotEmpty() && password != passwordConfirm
+    fun hasValidPasswords() = password.isNotEmpty() && passwordConfirm.isNotEmpty() && password == passwordConfirm
     fun hasValidCredentials() = name.isNotEmpty() && email.isNotEmpty() && hasValidPasswords()
 }

@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatroom.domain.repository.AuthenticationRepository
 import com.example.chatroom.feature.authentication.navigation.AuthenticationRoute
-import com.example.chatroom.feature.authentication.signin.SignInState
 import com.example.chatroom.feature.conversation.navigation.ConversationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +29,7 @@ class MainViewModel @Inject constructor(
             authenticationRepository
                 .isLoggedIn()
                 .onSuccess { isLoggedIn ->
-                    val route = if (isLoggedIn) ConversationRoute.Lounge else AuthenticationRoute.SignInRoute
+                    val route = if (isLoggedIn) ConversationRoute.Lounge else AuthenticationRoute.SignIn
                     update { it.copy(destinationAfterSplash = route) }
                 }
         }

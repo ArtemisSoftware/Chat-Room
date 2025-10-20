@@ -24,17 +24,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chatroom.R
 
 @Composable
 fun SignInScreen(
+    viewModel: SignInViewModel = hiltViewModel(),
     navigateToSingUp:() -> Unit
 ) {
-    /*
+    val state = viewModel.state.collectAsStateWithLifecycle().value
+
     SignInContent(
-        navigateTo = navigateTo
+        state = state,
+        event = viewModel::onTriggerEvent,
+        navigateToSingUp = navigateToSingUp
     )
-    */
 }
 
 

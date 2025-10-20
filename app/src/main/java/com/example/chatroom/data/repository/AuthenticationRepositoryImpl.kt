@@ -1,52 +1,96 @@
 package com.example.chatroom.data.repository
 
-class AuthenticationRepositoryImpl {
-    //TODO: completar
-/*
-    setup
-    https://www.youtube.com/watch?v=qnSY34NWOOY&t=1206s
+import com.example.chatroom.core.domain.Resource
+import com.example.chatroom.core.domain.error.DataError
+import com.example.chatroom.domain.repository.AuthenticationRepository
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
+import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-    fun signIn(email: String, password: String) {
-        _state.value = SignInState.Loading
-        // Firebase signIn
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    task.result.user?.let {
-                        _state.value = SignInState.Success
-                        return@addOnCompleteListener
-                    }
-                    _state.value = SignInState.Error
+class AuthenticationRepositoryImpl @Inject constructor(
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+): AuthenticationRepository {
 
-                } else {
-                    _state.value = SignInState.Error
-                }
-            }
+    override suspend fun isLoggedIn(): Resource<Boolean> {
+        val currentUser = firebaseAuth.currentUser
+        return Resource.Success(currentUser != null)
     }
 
-
-    fun signUp(name: String, email: String, password: String) {
-        _state.value = SignUpState.Loading
-        // Firebase signIn
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    task.result.user?.let {
-                        it.updateProfile(
-                            com.google.firebase.auth.UserProfileChangeRequest.Builder()
+    override suspend fun signUp(
+        name: String,
+        email: String,
+        password: String
+    ): Resource<Unit> {
+        return suspendCoroutine { continuation ->
+            firebaseAuth
+                .createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        task.result.user?.let {
+                            it.updateProfile(
+                            UserProfileChangeRequest.Builder()
                                 .setDisplayName(name)
                                 .build()
-                        )?.addOnCompleteListener {
-                            _state.value = SignUpState.Success
+                            ).addOnCompleteListener { updateTask ->
+                                if (updateTask.isSuccessful) {
+                                    continuation.resume(Resource.Success(Unit))
+                                } else {
+                                    continuation.resume(
+                                        Resource.Failure(
+                                            DataError.FirebaseError.Error(
+                                                updateTask.exception?.message
+                                            )
+                                        )
+                                    )
+                                }
+                            }
+                            return@addOnCompleteListener
                         }
-                        return@addOnCompleteListener
+                        continuation.resume(
+                            Resource.Failure(DataError.FirebaseError.NoUserFound)
+                        )
+                    } else {
+                        continuation.resume(
+                        Resource.Failure(DataError.FirebaseError.Error(task.exception?.message))
+                        )
                     }
-                    _state.value = SignUpState.Error
-
-                } else {
-                    _state.value = SignUpState.Error
                 }
-            }
+        }
     }
-    */
+
+    override suspend fun signIn(
+        email: String,
+        password: String
+    ): Resource<Unit> {
+        return suspendCoroutine { continuation ->
+            firebaseAuth
+                .signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        task.result.user?.let {
+                            continuation.resume(Resource.Success(Unit))
+                            return@addOnCompleteListener
+                        }
+                        continuation.resume(
+                            Resource.Failure(
+                                DataError.FirebaseError.Error(
+                                    task.exception?.message
+                                )
+                            )
+                        )
+
+                    } else {
+                        continuation.resume(
+                            Resource.Failure(
+                                DataError.FirebaseError.Error(
+                                    task.exception?.message
+                                )
+                            )
+                        )
+                    }
+                }
+        }
+    }
 }

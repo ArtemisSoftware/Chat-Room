@@ -24,19 +24,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chatroom.R
 
 @Composable
 fun SignUpScreen(
-    navigateBack: () -> Unit
+    viewModel: SignUpViewModel = hiltViewModel(),
+    navigateToSignIn: () -> Unit
 ) {
+    val state = viewModel.state.collectAsStateWithLifecycle().value
 
+    SignUpContent(
+        state = state,
+        navigateToSignIn = navigateToSignIn,
+        event = viewModel::onTriggerEvent
+    )
 }
 
 @Composable
 private fun SignUpContent(
     state: SignUpState,
-    navigateBack: () -> Unit,
+    navigateToSignIn: () -> Unit,
     event: (SignUpEvent) -> Unit
 ) {
  /*
@@ -117,7 +126,7 @@ private fun SignUpContent(
                     }
                 )
                 TextButton(
-                    onClick = navigateBack,
+                    onClick = navigateToSignIn,
                     content = {
                         Text(text = stringResource(R.string.already_have_an_account_sign_in))
                     }
@@ -132,7 +141,7 @@ private fun SignUpContent(
 @Composable
 private fun SignUpContentPreview() {
     SignUpContent(
-        navigateBack = {},
+        navigateToSignIn = {},
         event = {},
         state = SignUpState(email = "email@email.com", password = "1234")
     )
