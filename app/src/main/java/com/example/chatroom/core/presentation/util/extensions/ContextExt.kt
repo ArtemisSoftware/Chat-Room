@@ -1,4 +1,4 @@
-package com.example.chatroom.presentation.util.extensions
+package com.example.chatroom.core.presentation.util.extensions
 
 import android.content.Context
 import android.net.Uri

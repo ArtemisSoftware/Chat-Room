@@ -10,3 +10,9 @@ sealed class AuthenticationRoute {
     @Serializable
     object SignUp
 }
+
+internal sealed class OtherRoute {
+
+    @Serializable
+    object Lounge
+}

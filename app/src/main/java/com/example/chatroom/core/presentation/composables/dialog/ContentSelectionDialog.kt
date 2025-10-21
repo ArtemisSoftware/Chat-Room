@@ -1,4 +1,4 @@
-package com.example.chatroom.presentation.composables.dialog
+package com.example.chatroom.core.presentation.composables.dialog
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.example.chatroom.domain.models.Message
 import com.example.chatroom.feature.conversation.chat.composables.ChatBubble
 import com.example.chatroom.feature.conversation.chat.composables.MessageSender
-import com.example.chatroom.presentation.composables.dialog.ContentSelectionDialog
+import com.example.chatroom.core.presentation.composables.dialog.ContentSelectionDialog
 import com.example.chatroom.ui.theme.ChatRoomTheme
 
 @Composable

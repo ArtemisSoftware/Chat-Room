@@ -27,11 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chatroom.R
+import com.example.chatroom.core.presentation.composables.event.ManageUIEvents
+import com.example.chatroom.feature.authentication.navigation.OtherRoute
 
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
-    navigateToSignIn: () -> Unit
+    navigateToSignIn: () -> Unit,
+    navigateToLounge: () -> Unit
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value
 
@@ -39,6 +42,15 @@ fun SignUpScreen(
         state = state,
         navigateToSignIn = navigateToSignIn,
         event = viewModel::onTriggerEvent
+    )
+
+    ManageUIEvents(
+        uiEvent = viewModel.uiEvent,
+        onNavigateWithRoute = {
+            when(it){
+                OtherRoute.Lounge -> navigateToLounge()
+            }
+        }
     )
 }
 

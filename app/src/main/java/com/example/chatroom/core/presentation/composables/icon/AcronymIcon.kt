@@ -1,4 +1,4 @@
-package com.example.chatroom.presentation.composables.icon
+package com.example.chatroom.core.presentation.composables.icon
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
