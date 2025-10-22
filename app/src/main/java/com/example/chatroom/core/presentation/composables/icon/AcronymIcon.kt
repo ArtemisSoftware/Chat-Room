@@ -35,14 +35,14 @@ fun AcronymIcon(
     Box(
         modifier = modifier
             .padding(8.dp)
-            .size(70.dp)
+            .size(48.dp)
             .clip(CircleShape)
             .background(color.copy(alpha = 0.3f))
 
     ) {
         Text(
             text = name[0].uppercase(),
-            fontSize = 32.sp,
+            fontSize = 28.sp,
             color = Color.White,
             textAlign = TextAlign.Center,
             modifier = Modifier.align(Alignment.Center)

@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.chatroom.feature.authentication.navigation.AuthenticationRoute
 import com.example.chatroom.feature.authentication.navigation.authenticationNavGraph
+import com.example.chatroom.feature.conversation.navigation.ConversationRoute
 import com.example.chatroom.feature.conversation.navigation.conversationNavGraph
 
 @Composable
@@ -22,6 +23,13 @@ fun RootNavGraph(
 
         authenticationNavGraph(
             navController = navController,
+            navigateToLounge = {
+                navController.navigate(ConversationRoute.Lounge) {
+                    popUpTo(0) {
+                        inclusive = true
+                    }
+                }
+            }
         )
 
         conversationNavGraph(

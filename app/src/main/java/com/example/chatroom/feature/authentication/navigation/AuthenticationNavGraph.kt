@@ -10,6 +10,7 @@ const val AUTHENTICATION_GRAPH = "authentication_graph"
 
 fun NavGraphBuilder.authenticationNavGraph(
     navController: NavHostController,
+    navigateToLounge: () -> Unit,
 ) {
 
     composable<AuthenticationRoute.SignUp> {
@@ -17,12 +18,14 @@ fun NavGraphBuilder.authenticationNavGraph(
             navigateToSignIn = {
                 navController.popBackStack()
             },
+            navigateToLounge = navigateToLounge
         )
     }
 
     composable<AuthenticationRoute.SignIn> {
         SignInScreen(
             navigateToSingUp = { navController.navigate(AuthenticationRoute.SignUp) },
+            navigateToLounge = navigateToLounge
         )
     }
 }

@@ -1,7 +1,9 @@
 package com.example.chatroom.feature.authentication.data.di
 
 import com.example.chatroom.data.repository.AuthenticationRepositoryImpl
+import com.example.chatroom.data.repository.ChannelRepositoryImpl
 import com.example.chatroom.domain.repository.AuthenticationRepository
+import com.example.chatroom.domain.repository.ChannelRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,5 +18,11 @@ object RepositoryModule {
     @Singleton
     fun provideAuthenticationRepository(): AuthenticationRepository {
         return AuthenticationRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideChannelRepository(): ChannelRepository {
+        return ChannelRepositoryImpl()
     }
 }

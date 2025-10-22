@@ -27,11 +27,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chatroom.R
+import com.example.chatroom.core.presentation.composables.event.ManageUIEvents
+import com.example.chatroom.feature.authentication.navigation.OtherRoute
 
 @Composable
-fun SignInScreen(
+internal fun SignInScreen(
     viewModel: SignInViewModel = hiltViewModel(),
-    navigateToSingUp:() -> Unit
+    navigateToSingUp:() -> Unit,
+    navigateToLounge: () -> Unit
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value
 
@@ -39,6 +42,15 @@ fun SignInScreen(
         state = state,
         event = viewModel::onTriggerEvent,
         navigateToSingUp = navigateToSingUp
+    )
+
+    ManageUIEvents(
+        uiEvent = viewModel.uiEvent,
+        onNavigateWithRoute = {
+            when(it){
+                OtherRoute.Lounge -> navigateToLounge()
+            }
+        }
     )
 }
 

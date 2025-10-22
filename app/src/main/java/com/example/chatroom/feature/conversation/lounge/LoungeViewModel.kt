@@ -1,14 +1,26 @@
 package com.example.chatroom.feature.conversation.lounge
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.chatroom.domain.models.Channel
 import com.example.chatroom.domain.repository.ChannelRepository
+import com.google.firebase.Firebase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.text.get
 
-class LoungeViewModel constructor(
+@HiltViewModel
+internal class LoungeViewModel @Inject constructor(
     private val channelRepository: ChannelRepository
 ) : ViewModel() {
 
@@ -31,10 +43,13 @@ class LoungeViewModel constructor(
         viewModelScope.launch {
             channelRepository
                 .getChannels()
-                .onSuccess { result ->
-                    update { it.copy(channels = result) }
-                }
-                .onFailure {  }
+                .collect { result ->
+                    result
+                        .onSuccess { result ->
+                            update { it.copy(channels = result) }
+                        }
+                            .onFailure {  }
+                        }
         }
     }
 
@@ -50,7 +65,7 @@ class LoungeViewModel constructor(
         if(!newChannel.isNullOrEmpty()) {
             viewModelScope.launch {
                 channelRepository.addChannel(name = newChannel)
-                updateChannelName()
+                _state.update { it.copy(newChannel = null, showChannelDialog = false) }
             }
         }
     }

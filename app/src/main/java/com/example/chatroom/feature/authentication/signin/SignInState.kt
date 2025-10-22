@@ -1,6 +1,6 @@
 package com.example.chatroom.feature.authentication.signin
 
-data class SignInState(
+internal data class SignInState(
     val email: String = "",
     val password: String = "",
     val isLoading: Boolean = false

@@ -31,7 +31,7 @@ import com.example.chatroom.core.presentation.composables.event.ManageUIEvents
 import com.example.chatroom.feature.authentication.navigation.OtherRoute
 
 @Composable
-fun SignUpScreen(
+internal fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel(),
     navigateToSignIn: () -> Unit,
     navigateToLounge: () -> Unit

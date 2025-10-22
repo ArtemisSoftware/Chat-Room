@@ -1,6 +1,6 @@
 package com.example.chatroom.feature.authentication.signup
 
-data class SignUpState(
+internal data class SignUpState(
     val name: String = "",
     val email: String = "",
     val password: String = "",

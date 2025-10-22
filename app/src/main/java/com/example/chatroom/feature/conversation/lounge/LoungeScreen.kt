@@ -31,6 +31,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chatroom.R
 import com.example.chatroom.domain.models.Channel
 import com.example.chatroom.feature.conversation.lounge.composables.AddChannelDialog
@@ -40,61 +42,17 @@ import com.example.chatroom.ui.theme.DarkGrey
 
 @Composable
 internal fun LoungeScreen(
-    navigateToChat: (String, String) -> Unit
+    navigateToChat: (String, String) -> Unit,
+    viewModel: LoungeViewModel = hiltViewModel()
 ) {
-    /*
-    val viewModel = hiltViewModel<HomeViewModel>()
-    val channels = viewModel.channels.collectAsState()
-    val addChannel = remember {
-        mutableStateOf(false)
-    }
-    val sheetState = rememberModalBottomSheetState()
-    Scaffold(floatingActionButton = {
-        Box(modifier = Modifier
-            .padding(16.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(Color.Blue)
-            .clickable {
-                addChannel.value = true
-            }) {
-            Text(
-                text = "Add Channel", modifier = Modifier.padding(16.dp), color = Color.White
-            )
-        }
-    }) {
-        Box(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
-        ) {
-            LazyColumn {
-                items(channels.value) { channel ->
-                    Column {
-                        Text(text = channel.name,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(Color.Red.copy(alpha = 0.3f))
-                                .clickable {
-                                    navController.navigate("chat/${channel.id}")
-                                }
-                                .padding(16.dp))
-                    }
-                }
-            }
-        }
-    }
 
-    if (addChannel.value) {
-        ModalBottomSheet(onDismissRequest = { addChannel.value = false }, sheetState = sheetState) {
-            AddChannelDialog {
-                viewModel.addChannel(it)
-                addChannel.value = false
-            }
-        }
-    }
-*/
+    val state = viewModel.state.collectAsStateWithLifecycle().value
+
+    LoungeContent(
+        state = state,
+        navigateToChat = navigateToChat,
+        onEvent = viewModel::onTriggerEvent
+    )
 }
 
 @Composable
@@ -114,15 +72,17 @@ private fun LoungeContent(
                 Text(stringResource(R.string.add_channel))
             }
         },
-        content = {
+        content = { innerPadding ->
             Box(
                 modifier = Modifier
-                    .padding(it)
                     .fillMaxSize()
+                    .padding(innerPadding)
             ) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
 
                     item {
@@ -168,7 +128,6 @@ private fun LoungeContent(
                     }
 
                     items(state.channels) { channel ->
-
                         ChannelCard(
                             channel = channel,
                             modifier = Modifier
