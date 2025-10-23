@@ -86,8 +86,12 @@ private fun ChatBubble_user_Preview() {
         ChatBubble(
             modifier = Modifier.fillMaxWidth(),
             message = Message(
+                id = "2",
+                senderName = "Milo",
+                senderId = "Mi",
                 isMyMessage = true,
-                message = "THe first message"
+                message = "THe 2 message",
+                createdAt = 2L,
             )
         )
     }
@@ -100,8 +104,12 @@ private fun ChatBubble_other_user_Preview() {
         ChatBubble(
             modifier = Modifier.fillMaxWidth(),
             message = Message(
+                id = "2",
+                senderName = "Milo",
+                senderId = "Mi",
                 isMyMessage = false,
-                message = "THe second message"
+                message = "THe 2 message",
+                createdAt = 2L,
             )
         )
     }

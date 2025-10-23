@@ -1,17 +1,24 @@
 package com.example.chatroom.feature.conversation.chat
 
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatroom.domain.repository.ChatRepository
 import com.example.chatroom.feature.authentication.signin.SignInState
+import com.example.chatroom.feature.conversation.navigation.ConversationRoute
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
+import kotlin.text.orEmpty
 
-class ChatViewModel constructor(
-    private val chatRepository: ChatRepository
+@HiltViewModel
+class ChatViewModel @Inject constructor(
+    private val chatRepository: ChatRepository,
+    private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     private val _state = MutableStateFlow(ChatState())
@@ -20,7 +27,15 @@ class ChatViewModel constructor(
     private lateinit var channelId: String
 
     init {
+        getData()
         listenMessages()
+    }
+
+    private fun getData() = with(_state){
+        val channelName = savedStateHandle.get<String>(ConversationRoute.Chat::channelName.name)
+        channelId = savedStateHandle.get<String>(ConversationRoute.Chat::channelId.name).orEmpty()
+
+        update { it.copy(channelName = channelName.orEmpty()) }
     }
 
     fun onTriggerEvent(event: ChatEvent){
@@ -36,11 +51,14 @@ class ChatViewModel constructor(
         viewModelScope.launch {
             chatRepository
                 .listenForMessages(channelId = channelId)
-                .onSuccess { result ->
-                    update { it.copy(messages = result) }
-                }
-                .onFailure {
-
+                .collect { result ->
+                    result
+                        .onSuccess { result ->
+                            update { it.copy(messages = result) }
+                        }
+                        .onFailure {
+                            //TODO: add error
+                        }
                 }
         }
     }

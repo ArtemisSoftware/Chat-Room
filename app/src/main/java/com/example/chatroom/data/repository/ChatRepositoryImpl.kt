@@ -1,28 +1,98 @@
 package com.example.chatroom.data.repository
 
-class ChatRepositoryImpl {
+import com.example.chatroom.core.domain.Resource
+import com.example.chatroom.core.domain.error.DataError
+import com.example.chatroom.data.constants.FirebaseConstant
+import com.example.chatroom.data.constants.FirebaseConstant.MESSAGE_DATABASE_PATH
+import com.example.chatroom.data.firebase.models.MessageFb
+import com.example.chatroom.data.mapper.toMessage
+import com.example.chatroom.domain.models.Message
+import com.example.chatroom.domain.repository.ChatRepository
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import java.util.UUID
+import javax.inject.Inject
 
-    /*
-    private val db = Firebase.database
+class ChatRepositoryImpl @Inject constructor(
+    private val firebaseDatabase: DatabaseReference = Firebase
+        .database(FirebaseConstant.FIREBASE_DATABASE_URL)
+        .getReference(FirebaseConstant.MESSAGE_DATABASE_PATH),
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
+): ChatRepository {
 
-    fun sendMessage(channelID: String, messageText: String?, image: String? = null) {
-        val message = Message(
-            db.reference.push().key ?: UUID.randomUUID().toString(),
-            Firebase.auth.currentUser?.uid ?: "",
-            messageText,
-            System.currentTimeMillis(),
-            Firebase.auth.currentUser?.displayName ?: "",
-            null,
-            image
+    override suspend fun sendMessage(channelId: String, message: String, image: String?) {
+        val message = MessageFb(
+            id = firebaseDatabase.push().key ?: UUID.randomUUID().toString(),
+            senderId = firebaseAuth.currentUser?.uid ?: "",
+            message = message,
+            senderName = firebaseAuth.currentUser?.displayName ?: "",
+            senderImage = image,
         )
 
-        db.reference.child("messages").child(channelID).push().setValue(message)
+        firebaseDatabase
+            .child(channelId)
+            .push()
+            .setValue(message)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    postNotificationToUsers(channelID, message.senderName, messageText ?: "")
+                    //postNotificationToUsers(channelID, message.senderName, messageText ?: "")
                 }
             }
     }
+
+    override fun listenForMessages(channelId: String): Flow<Resource<List<Message>>> = callbackFlow {
+        val listener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                val messages = mutableListOf<Message>()
+
+                dataSnapshot.children.forEach { data ->
+                    val message = data.getValue(MessageFb::class.java)
+                    message?.let {
+                        messages.add(
+                            it.toMessage(isMyMessage = message.senderId == firebaseAuth.currentUser?.uid)
+                        )
+                    }
+                }
+
+                trySend(Resource.Success(messages)).isSuccess
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                trySend(
+                    Resource.Failure(
+                        DataError.FirebaseError.Error(error.message)
+                    )
+                ).isSuccess
+            }
+        }
+
+        firebaseDatabase
+            .child(channelId)
+            .orderByChild("createdAt")
+            .addValueEventListener(listener)
+
+        // Remove listener when flow collection is cancelled
+        awaitClose {
+            firebaseDatabase.removeEventListener(listener)
+        }
+    }
+
+
+    override suspend fun sendImage(channelId: String, uri: String) {
+        TODO("Not yet implemented")
+    }
+    /*
 
 
     fun sendImageMessage(uri: Uri, channelID: String) {
@@ -42,28 +112,6 @@ class ChatRepositoryImpl {
             }
         }
     }
+*/
 
-//TODO: to know is the message belongs to user
-message.senderId == Firebase.auth.currentUser?.uid
-
-    fun listenForMessages(channelID: String) {
-        db.getReference("messages").child(channelID).orderByChild("createdAt")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val list = mutableListOf<Message>()
-                    snapshot.children.forEach { data ->
-                        val message = data.getValue(Message::class.java)
-                        message?.let {
-                            list.add(it)
-                        }
-                    }
-                    _messages.value = list
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    // Handle error
-                }
-            })
-    }
-     */
 }

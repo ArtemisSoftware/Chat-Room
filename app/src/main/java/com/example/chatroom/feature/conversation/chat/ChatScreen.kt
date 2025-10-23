@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chatroom.domain.models.Message
 import com.example.chatroom.feature.conversation.chat.composables.ChatBubble
 import com.example.chatroom.feature.conversation.chat.composables.MessageSender
@@ -27,8 +29,16 @@ import com.example.chatroom.core.presentation.composables.dialog.ContentSelectio
 import com.example.chatroom.ui.theme.ChatRoomTheme
 
 @Composable
-internal fun ChatScreen() {
+internal fun ChatScreen(
+    viewModel: ChatViewModel = hiltViewModel()
+) {
 
+    val state = viewModel.state.collectAsStateWithLifecycle().value
+
+    ChatContent(
+        state = state,
+        onEvent = viewModel::onTriggerEvent
+    )
 }
 
 @Composable
@@ -95,16 +105,28 @@ private fun ChatContentPreview() {
                 channelName = "The channel",
                 messages = listOf(
                     Message(
+                        id = "1",
+                        senderName = "Camus",
+                        senderId = "ca",
                         isMyMessage = false,
-                        message = "THe 1 message"
+                        message = "THe 1 message",
+                        createdAt = 1L,
                     ),
                     Message(
+                        id = "2",
+                        senderName = "Milo",
+                        senderId = "Mi",
                         isMyMessage = true,
-                        message = "THe 2 message"
+                        message = "THe 2 message",
+                        createdAt = 2L,
                     ),
                     Message(
+                        id = "3",
+                        senderName = "Camus",
+                        senderId = "ca",
                         isMyMessage = false,
-                        message = "THe 3 message"
+                        message = "THe 3 message",
+                        createdAt = 3L,
                     )
                 )
             ),
