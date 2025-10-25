@@ -58,6 +58,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.storage)
 
     implementation(libs.dagger.hilt.android)
     implementation(libs.dagger.hilt.compose)
