@@ -76,8 +76,8 @@ private fun ChatContent(
                     .align(Alignment.BottomCenter)
                     .padding(8.dp)
                     .background(Color.LightGray),
-                message = state.currentMessage,
-                onMessageUpdate = { onEvent(ChatEvent.UpdateMessage(it)) },
+                message = state.text.orEmpty(),
+                onMessageUpdate = { onEvent(ChatEvent.UpdateText(it)) },
                 onSendMessage = { onEvent(ChatEvent.SendMessage) },
                 onAttachementClick = { onEvent(ChatEvent.ShowContentDialog(true)) }
             )
@@ -88,7 +88,8 @@ private fun ChatContent(
         ContentSelectionDialog(
             onDismiss = { onEvent(ChatEvent.ShowContentDialog(false)) },
             onSuccessResult = {
-                onEvent(ChatEvent.SendImage(it))
+                onEvent(ChatEvent.UpdateImage(it))
+                onEvent(ChatEvent.SendMessage)
             }
 
         )

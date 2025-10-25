@@ -5,7 +5,7 @@ import com.example.chatroom.domain.models.Message
 import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {
-    suspend fun sendMessage(channelId: String, message: String, image: String? = null)
+    suspend fun sendMessage(channelId: String, text: String)
+    suspend fun sendImage(channelId: String, image: String)
     fun listenForMessages(channelId: String): Flow<Resource<List<Message>>>
-    suspend fun sendImage(channelId: String, uri: String)
 }

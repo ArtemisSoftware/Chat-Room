@@ -4,7 +4,7 @@ import android.net.Uri
 
 sealed interface ChatEvent {
     data object SendMessage: ChatEvent
-    data class UpdateMessage(val message: String): ChatEvent
+    data class UpdateText(val text: String): ChatEvent
+    data class UpdateImage(val uri: Uri): ChatEvent
     data class ShowContentDialog(val show: Boolean): ChatEvent
-    data class SendImage(val uri: Uri): ChatEvent
 }

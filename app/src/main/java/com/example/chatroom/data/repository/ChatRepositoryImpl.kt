@@ -1,5 +1,6 @@
 package com.example.chatroom.data.repository
 
+import android.net.Uri
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
 import com.example.chatroom.data.constants.FirebaseConstant
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import java.util.UUID
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 class ChatRepositoryImpl @Inject constructor(
     private val firebaseDatabase: DatabaseReference = Firebase
@@ -28,15 +30,34 @@ class ChatRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ): ChatRepository {
 
-    override suspend fun sendMessage(channelId: String, message: String, image: String?) {
-        val message = MessageFb(
-            id = firebaseDatabase.push().key ?: UUID.randomUUID().toString(),
-            senderId = firebaseAuth.currentUser?.uid ?: "",
-            message = message,
-            senderName = firebaseAuth.currentUser?.displayName ?: "",
-            senderImage = image,
-        )
+    override suspend fun sendMessage(channelId: String, text: String) {
 
+        firebaseAuth.currentUser?.let { currentUser ->
+            val message = MessageFb(
+                id = firebaseDatabase.push().key ?: UUID.randomUUID().toString(),
+                senderId = currentUser.uid,
+                message = text,
+                senderName = currentUser.displayName ?: "",
+            )
+
+            send(channelId = channelId, message = message)
+        }
+    }
+
+    override suspend fun sendImage(channelId: String, image: String) {
+        firebaseAuth.currentUser?.let { currentUser ->
+            val message = MessageFb(
+                id = firebaseDatabase.push().key ?: UUID.randomUUID().toString(),
+                senderId = currentUser.uid,
+                senderName = currentUser.displayName ?: "",
+                imageUrl = image
+            )
+
+            send(channelId = channelId, message = message)
+        }
+    }
+
+    private suspend fun send(channelId: String, message: MessageFb){
         firebaseDatabase
             .child(channelId)
             .push()
@@ -89,9 +110,7 @@ class ChatRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun sendImage(channelId: String, uri: String) {
-        TODO("Not yet implemented")
-    }
+
     /*
 
 

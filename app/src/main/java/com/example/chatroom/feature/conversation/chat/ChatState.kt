@@ -5,6 +5,7 @@ import com.example.chatroom.domain.models.Message
 data class ChatState(
     val channelName: String = "",
     val messages: List<Message> = emptyList(),
-    val currentMessage: String = "",
+    val text: String? = null,
+    val imageUri: String? = null,
     val showMediaContentDialog: Boolean = false,
 )

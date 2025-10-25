@@ -4,8 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.chatroom.domain.SendMessageUseCase
 import com.example.chatroom.domain.repository.ChatRepository
-import com.example.chatroom.feature.authentication.signin.SignInState
 import com.example.chatroom.feature.conversation.navigation.ConversationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +18,7 @@ import kotlin.text.orEmpty
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val chatRepository: ChatRepository,
+    private val sendMessageUseCase: SendMessageUseCase,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
@@ -41,9 +42,9 @@ class ChatViewModel @Inject constructor(
     fun onTriggerEvent(event: ChatEvent){
         when(event){
             ChatEvent.SendMessage -> sendMessage()
-            is ChatEvent.UpdateMessage -> updateMessage(event.message)
+            is ChatEvent.UpdateText -> updateText(event.text)
             is ChatEvent.ShowContentDialog -> showContentDialog(event.show)
-            is ChatEvent.SendImage -> sendImage(event.uri)
+            is ChatEvent.UpdateImage -> updateImage(event.uri)
         }
     }
 
@@ -63,8 +64,12 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    private fun updateMessage(text: String) = with(_state){
-        update { it.copy(currentMessage = text) }
+    private fun updateText(text: String) = with(_state){
+        update { it.copy(text = text) }
+    }
+
+    private fun updateImage(uri: Uri) = with(_state){
+        update { it.copy(imageUri = uri.toString()) }
     }
 
     private fun showContentDialog(show: Boolean) = with(_state){
@@ -73,19 +78,14 @@ class ChatViewModel @Inject constructor(
 
     private fun sendMessage() {
         viewModelScope.launch {
-            chatRepository
-                .sendMessage(channelId = channelId, message = _state.value.currentMessage)
+            sendMessageUseCase
+                .invoke(
+                    channelId = channelId,
+                    text = _state.value.text,
+                    imageUri = _state.value.imageUri
+                )
 
-            _state.update { it.copy(currentMessage = "") }
-        }
-    }
-
-    private fun sendImage(uri: Uri) {
-        viewModelScope.launch {
-            chatRepository
-                .sendImage(channelId = channelId, uri = uri.toString())
-
-            _state.update { it.copy(currentMessage = "") }
+            _state.update { it.copy(text = null, imageUri = null) }
         }
     }
 }
