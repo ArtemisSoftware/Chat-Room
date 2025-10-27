@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.chatroom.domain.ListenToMessagesUseCase
 import com.example.chatroom.domain.SendMessageUseCase
 import com.example.chatroom.domain.repository.ChatRepository
 import com.example.chatroom.feature.conversation.navigation.ConversationRoute
@@ -18,6 +19,7 @@ import kotlin.text.orEmpty
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val chatRepository: ChatRepository,
+    private val listenToMessagesUseCase: ListenToMessagesUseCase,
     private val sendMessageUseCase: SendMessageUseCase,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
@@ -50,8 +52,7 @@ class ChatViewModel @Inject constructor(
 
     private fun listenMessages() = with(_state){
         viewModelScope.launch {
-            chatRepository
-                .listenForMessages(channelId = channelId)
+            listenToMessagesUseCase(channelId = channelId)
                 .collect { result ->
                     result
                         .onSuccess { result ->

@@ -7,7 +7,9 @@ import com.example.chatroom.domain.repository.AuthenticationRepository
 import com.example.chatroom.domain.repository.ChannelRepository
 import com.example.chatroom.domain.repository.ChatRepository
 import com.example.chatroom.domain.repository.ImageRepository
-import com.example.chatroom.domain.repository.ImageRepositoryImpl
+import com.example.chatroom.data.repository.ImageRepositoryImpl
+import com.example.chatroom.data.repository.NotificationRepositoryImpl
+import com.example.chatroom.domain.repository.NotificationRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,5 +42,11 @@ object RepositoryModule {
     @Singleton
     fun provideImageRepository(): ImageRepository {
         return ImageRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationRepository(): NotificationRepository {
+        return NotificationRepositoryImpl()
     }
 }

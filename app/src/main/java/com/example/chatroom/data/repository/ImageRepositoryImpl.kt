@@ -1,15 +1,14 @@
-package com.example.chatroom.domain.repository
+package com.example.chatroom.data.repository
 
 import androidx.core.net.toUri
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
+import com.example.chatroom.domain.repository.ImageRepository
 import com.google.firebase.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class ImageRepositoryImpl(
     private val firebaseStorage: FirebaseStorage = Firebase.storage
