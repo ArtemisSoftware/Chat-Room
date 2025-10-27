@@ -1,19 +1,56 @@
 package com.example.chatroom.data.repository
 
-class NotificationRepositoryImpl {
+import android.content.Context
+import android.util.Log
+import com.example.chatroom.R
+import com.example.chatroom.core.domain.Resource
+import com.example.chatroom.core.domain.error.DataError
+import com.example.chatroom.domain.repository.NotificationRepository
+import com.google.firebase.messaging.FirebaseMessaging
+import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+
+class NotificationRepositoryImpl @Inject constructor(
+    private val context: Context,
+    private val firebaseMessaging: FirebaseMessaging = FirebaseMessaging.getInstance()
+): NotificationRepository {
+
+    override suspend fun subscribeForNotification(channelId: String): Resource<Unit> {
+        return suspendCoroutine { continuation ->
+            firebaseMessaging
+                .subscribeToTopic("group_$channelId")
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        continuation.resume(Resource.Success(Unit))
+                        Log.d("ChatViewModel", "Subscribed to topic: group_$channelId")
+                    } else {
+                        continuation.resume(Resource.Failure(DataError.FirebaseError.UnableToSubscribe))
+
+                        Log.d("ChatViewModel", "Failed to subscribe to topic: group_$channelId")
+                    }
+                }
+        }
+    }
+
+    override fun postNotificationToUsers(
+        channelId: String,
+        senderName: String,
+        messageContent: String
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    private fun getAccessToken(): String {
+        val inputStream = context.resources.openRawResource(R.raw.chatroom_key)
+        val googleCreds = GoogleCredentials.fromStream(inputStream)
+            .createScoped(listOf("https://www.googleapis.com/auth/firebase.messaging"))
+        return googleCreds.refreshAccessToken().tokenValue
+    }
+
     // TODO: deveria haver um metodo para unsubscribe
     /*
-     private fun subscribeForNotification(channelID: String) {
-        FirebaseMessaging.getInstance().subscribeToTopic("group_$channelID")
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Log.d("ChatViewModel", "Subscribed to topic: group_$channelID")
-                } else {
-                    Log.d("ChatViewModel", "Failed to subscribe to topic: group_$channelID")
-                    // Handle failure
-                }
-            }
-    }
+
 
     private fun postNotificationToUsers(
         channelID: String,
@@ -53,11 +90,7 @@ class NotificationRepositoryImpl {
         queue.add(request)
     }
 
-    private fun getAccessToken(): String {
-        val inputStream = context.resources.openRawResource(R.raw.chatter_key)
-        val googleCreds = GoogleCredentials.fromStream(inputStream)
-            .createScoped(listOf("https://www.googleapis.com/auth/firebase.messaging"))
-        return googleCreds.refreshAccessToken().tokenValue
-    }
+
      */
+
 }
