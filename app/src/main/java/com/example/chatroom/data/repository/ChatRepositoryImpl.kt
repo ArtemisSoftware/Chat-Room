@@ -1,10 +1,8 @@
 package com.example.chatroom.data.repository
 
-import android.net.Uri
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
 import com.example.chatroom.data.constants.FirebaseConstant
-import com.example.chatroom.data.constants.FirebaseConstant.MESSAGE_DATABASE_PATH
 import com.example.chatroom.data.firebase.models.MessageFb
 import com.example.chatroom.data.mapper.toMessage
 import com.example.chatroom.domain.models.Message
@@ -21,7 +19,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import java.util.UUID
 import javax.inject.Inject
-import androidx.core.net.toUri
 
 class ChatRepositoryImpl @Inject constructor(
     private val firebaseDatabase: DatabaseReference = Firebase

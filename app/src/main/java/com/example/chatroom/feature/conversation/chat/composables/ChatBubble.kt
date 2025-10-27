@@ -5,22 +5,23 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.chatroom.R
 import com.example.chatroom.domain.models.Message
 import com.example.chatroom.feature.conversation.chat.mapper.toColor
@@ -31,6 +32,13 @@ internal fun ChatBubble(
     message: Message,
     modifier: Modifier = Modifier
 ) {
+
+    val model = ImageRequest.Builder(LocalContext.current)
+        .data(message.imageUrl)
+        .placeholder(R.drawable.ic_launcher_foreground)
+        .crossfade(true)
+        .build()
+
     val alignment = if (!message.isMyMessage) Alignment.CenterStart else Alignment.CenterEnd
 
     Box(
@@ -62,9 +70,12 @@ internal fun ChatBubble(
             ) {
                 message.imageUrl?.let {
                     AsyncImage(
-                        model = it,
+                        model = model,
                         contentDescription = null,
-                        modifier = Modifier.size(200.dp),
+                        modifier = Modifier
+                            .padding(12.dp)
+                            .clip( RoundedCornerShape(4.dp))
+                            .size(200.dp),
                         contentScale = ContentScale.Crop
                     )
                 } ?: run {
@@ -91,6 +102,25 @@ private fun ChatBubble_user_Preview() {
                 senderId = "Mi",
                 isMyMessage = true,
                 message = "THe 2 message",
+                createdAt = 2L,
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ChatBubble_user_image_Preview() {
+    ChatRoomTheme {
+        ChatBubble(
+            modifier = Modifier.fillMaxWidth(),
+            message = Message(
+                id = "2",
+                senderName = "Milo",
+                senderId = "Mi",
+                isMyMessage = true,
+                message = "",
+                imageUrl = "http://image.jpeg",
                 createdAt = 2L,
             )
         )
