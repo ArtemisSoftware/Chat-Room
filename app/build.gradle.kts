@@ -41,6 +41,17 @@ android {
     buildFeatures {
         compose = true
     }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/DEPENDENCIES"
+            excludes +="META-INF/LICENSE"
+            excludes +="META-INF/LICENSE.txt"
+            excludes +="META-INF/NOTICE"
+            excludes +="META-INF/NOTICE.txt"
+            excludes +="mozilla/public-suffix-list.txt"
+        }
+    }
 }
 
 dependencies {
@@ -62,6 +73,7 @@ dependencies {
     implementation(libs.firebase.messaging)
 
     implementation(libs.google.auth)
+    implementation(libs.volley)
 
     implementation(libs.dagger.hilt.android)
     implementation(libs.dagger.hilt.compose)
