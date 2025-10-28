@@ -1,5 +1,6 @@
 package com.example.chatroom.feature.authentication.data.di
 
+import android.content.Context
 import com.example.chatroom.data.repository.AuthenticationRepositoryImpl
 import com.example.chatroom.data.repository.ChannelRepositoryImpl
 import com.example.chatroom.data.repository.ChatRepositoryImpl
@@ -13,6 +14,7 @@ import com.example.chatroom.domain.repository.NotificationRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -46,7 +48,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideNotificationRepository(): NotificationRepository {
-        return NotificationRepositoryImpl()
+    fun provideNotificationRepository(@ApplicationContext context: Context): NotificationRepository {
+        return NotificationRepositoryImpl(context = context)
     }
 }

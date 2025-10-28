@@ -32,13 +32,16 @@ class CRMessagingService @Inject constructor(
 
     fun showNotification(title: String?, message: String?) {
 
-        Firebase.auth.currentUser?.let {
+        firebaseAuth.currentUser?.let {
             if(title?.contains(it.displayName.toString()) == true || message?.contains(it.displayName.toString()) == true) return
         }
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val channel =
-            NotificationChannel("messages", "Messages", NotificationManager.IMPORTANCE_HIGH)
+        val channel = NotificationChannel(
+            "messages",
+            "Messages",
+            NotificationManager.IMPORTANCE_HIGH
+        )
         notificationManager.createNotificationChannel(channel)
 
         val notificationId = Random().nextInt(1000)
