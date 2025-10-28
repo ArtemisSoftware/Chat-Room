@@ -61,6 +61,8 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.messaging)
 
+    implementation(libs.google.auth)
+
     implementation(libs.dagger.hilt.android)
     implementation(libs.dagger.hilt.compose)
     ksp(libs.dagger.hilt.compiler)
