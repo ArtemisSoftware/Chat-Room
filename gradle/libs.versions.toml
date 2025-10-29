@@ -20,6 +20,8 @@ firebaseBom = "34.4.0"
 com-google-devtools-ksp = "2.0.0-1.0.24"
 google-auth = "1.19.0"
 volley = "1.2.1"
+permissionx = "1.8.0"
+zegocloud = "+"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -63,6 +65,8 @@ google-auth = { group = "com.google.auth", name = "google-auth-library-oauth2-ht
 
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 
+zegocloud = { group = "com.github.ZEGOCLOUD", name = "zego_uikit_prebuilt_call_android", version.ref = "zegocloud" }
+permissionx = { group = "com.guolindev.permissionx", name = "permissionx", version.ref = "permissionx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
