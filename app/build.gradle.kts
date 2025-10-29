@@ -74,6 +74,10 @@ dependencies {
 
     implementation(libs.google.auth)
     implementation(libs.volley)
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    //implementation(libs.zegocloud)
+    implementation("com.github.ZEGOCLOUD:zego_uikit_prebuilt_call_android:+")
+    implementation(libs.permissionx)
 
     implementation(libs.dagger.hilt.android)
     implementation(libs.dagger.hilt.compose)

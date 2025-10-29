@@ -21,6 +21,8 @@ fun NavGraphBuilder.conversationNavGraph(
     }
 
     composable<ConversationRoute.Chat> {
-        ChatScreen()
+        ChatScreen(
+            navigateBack = { navController.popBackStack() }
+        )
     }
 }
