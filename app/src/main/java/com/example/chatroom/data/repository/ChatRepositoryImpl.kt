@@ -61,6 +61,7 @@ class ChatRepositoryImpl @Inject constructor(
             .setValue(message)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
+                    //TODO: completar
                     //postNotificationToUsers(channelID, message.senderName, messageText ?: "")
                 }
             }
@@ -105,29 +106,5 @@ class ChatRepositoryImpl @Inject constructor(
             firebaseDatabase.removeEventListener(listener)
         }
     }
-
-
-
-    /*
-
-
-    fun sendImageMessage(uri: Uri, channelID: String) {
-        val imageRef = Firebase.storage.reference.child("images/${UUID.randomUUID()}")
-        imageRef.putFile(uri).continueWithTask { task ->
-            if (!task.isSuccessful) {
-                task.exception?.let {
-                    throw it
-                }
-            }
-            imageRef.downloadUrl
-        }.addOnCompleteListener { task ->
-            val currentUser = Firebase.auth.currentUser
-            if (task.isSuccessful) {
-                val downloadUri = task.result
-                sendMessage(channelID, null, downloadUri.toString())
-            }
-        }
-    }
-*/
 
 }

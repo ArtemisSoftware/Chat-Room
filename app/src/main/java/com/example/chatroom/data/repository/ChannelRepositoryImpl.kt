@@ -6,6 +6,7 @@ import com.example.chatroom.data.constants.FirebaseConstant
 import com.example.chatroom.domain.models.Channel
 import com.example.chatroom.domain.repository.ChannelRepository
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class ChannelRepositoryImpl @Inject constructor(
     private val firebaseDatabase: DatabaseReference = Firebase
         .database(FirebaseConstant.FIREBASE_DATABASE_URL)
-        .getReference(FirebaseConstant.CHANNEL_DATABASE_PATH)
+        .getReference(FirebaseConstant.CHANNEL_DATABASE_PATH),
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ): ChannelRepository {
 
     override fun getChannels(): Flow<Resource<List<Channel>>> = callbackFlow {
@@ -71,5 +73,29 @@ class ChannelRepositoryImpl @Inject constructor(
                     */
                 }
         }
+    }
+
+
+    override fun registerUserIdtoChannel(channelId: String) {
+        val currentUser = firebaseAuth.currentUser
+        val ref = firebaseDatabase
+            .child("channels")
+            .child(channelId)
+            .child("users")
+
+        ref
+            .child(currentUser?.uid ?: "")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (!snapshot.exists()) {
+                        ref.child(currentUser?.uid ?: "").setValue(currentUser?.email)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            }
+        )
+
     }
 }

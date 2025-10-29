@@ -2,12 +2,14 @@ package com.example.chatroom.domain
 
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.domain.models.Message
+import com.example.chatroom.domain.repository.ChannelRepository
 import com.example.chatroom.domain.repository.ChatRepository
 import com.example.chatroom.domain.repository.NotificationRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ListenToMessagesUseCase @Inject constructor(
+    private val channelRepository: ChannelRepository,
     private val chatRepository: ChatRepository,
     private val notificationRepository: NotificationRepository
 ) {
@@ -15,6 +17,8 @@ class ListenToMessagesUseCase @Inject constructor(
 
         val isSubscribed = notificationRepository
             .subscribeForNotification(channelId = channelId)
+
+        channelRepository.registerUserIdtoChannel(channelId = channelId)
 
         return chatRepository.listenForMessages(channelId)
     }
