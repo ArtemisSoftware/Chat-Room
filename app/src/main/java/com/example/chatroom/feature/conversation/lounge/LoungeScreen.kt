@@ -154,6 +154,7 @@ private fun LoungeContent(
                                 .fillMaxWidth(),
                             onClick = { id, name -> navigateToChat(id, name) },
                             shouldShowCallButtons = false,
+                            onCall = {},
                         )
                     }
                 }

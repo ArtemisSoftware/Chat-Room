@@ -31,9 +31,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chatroom.core.presentation.composables.dialog.ContentSelectionDialog
 import com.example.chatroom.domain.models.Message
+import com.example.chatroom.feature.conversation.chat.composables.CallButton
 import com.example.chatroom.feature.conversation.chat.composables.ChatBubble
 import com.example.chatroom.feature.conversation.chat.composables.MessageSender
+import com.example.chatroom.feature.conversation.chat.mapper.toZegoUIKitUser
 import com.example.chatroom.ui.theme.ChatRoomTheme
+import com.zegocloud.uikit.service.defines.ZegoUIKitUser
 
 @Composable
 internal fun ChatScreen(
@@ -86,6 +89,14 @@ private fun ChatContent(
                             contentDescription = ""
                         )
                     }
+
+                    CallButton(
+                        isVideoCall = true,
+                        onClick = { callButton->
+                            val zegoUIKitUsers = state.participants.toZegoUIKitUser()
+                            callButton.setInvitees(zegoUIKitUsers)
+                        }
+                    )
                 },
             )
         }

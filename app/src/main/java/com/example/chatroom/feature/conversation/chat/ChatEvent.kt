@@ -1,6 +1,7 @@
 package com.example.chatroom.feature.conversation.chat
 
 import android.net.Uri
+import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
 
 sealed interface ChatEvent {
     data object SendMessage: ChatEvent

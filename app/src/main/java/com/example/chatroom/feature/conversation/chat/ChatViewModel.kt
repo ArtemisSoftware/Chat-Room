@@ -6,8 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatroom.domain.ListenToMessagesUseCase
 import com.example.chatroom.domain.SendMessageUseCase
+import com.example.chatroom.domain.repository.ChannelRepository
 import com.example.chatroom.domain.repository.ChatRepository
 import com.example.chatroom.feature.conversation.navigation.ConversationRoute
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
+import com.zegocloud.uikit.service.defines.ZegoUIKitUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,6 +23,7 @@ import kotlin.text.orEmpty
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
+    private val channelRepository: ChannelRepository,
     private val chatRepository: ChatRepository,
     private val listenToMessagesUseCase: ListenToMessagesUseCase,
     private val sendMessageUseCase: SendMessageUseCase,
@@ -32,6 +38,7 @@ class ChatViewModel @Inject constructor(
     init {
         getData()
         listenMessages()
+        getChatParticipants()
     }
 
     private fun getData() = with(_state){
@@ -87,6 +94,40 @@ class ChatViewModel @Inject constructor(
                 )
 
             _state.update { it.copy(text = null, imageUri = null) }
+        }
+    }
+
+
+    private fun getChatParticipants() = with(_state){
+        viewModelScope.launch {
+            channelRepository
+                .getAllUserEmails(channelId = channelId)
+                .collect { result ->
+                    result
+                        .onSuccess {  result ->
+                            update { it.copy(participants = result) }
+                        }
+                }
+            /*
+            .onSuccess {
+                val list: MutableList<ZegoUIKitUser> = mutableListOf()
+                it.forEach { email ->
+                    Firebase.auth.currentUser?.email?.let { em ->
+                        if(email != em){
+                            list.add(
+                                ZegoUIKitUser(
+                                    email, email
+                                )
+                            )
+                        }
+                    }
+                }
+                callButton.setInvitees(list)
+            }
+            .onFailure {
+
+            }
+        */
         }
     }
 }

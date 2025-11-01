@@ -17,7 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatroom.domain.models.Channel
 import com.example.chatroom.core.presentation.composables.icon.AcronymIcon
+import com.example.chatroom.feature.conversation.chat.composables.CallButton
 import com.example.chatroom.ui.theme.ChatRoomTheme
+import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
 
 @Composable
 internal fun ChannelCard(
@@ -25,7 +27,7 @@ internal fun ChannelCard(
     modifier: Modifier,
     shouldShowCallButtons: Boolean = false,
     onClick: (String, String) -> Unit,
-    //onCall: (ZegoSendCallInvitationButton) -> Unit
+    onCall: (ZegoSendCallInvitationButton) -> Unit
 ) {
 
     Card(
@@ -57,8 +59,8 @@ internal fun ChannelCard(
                 Row(
                     modifier = Modifier.align(Alignment.CenterEnd)
                 ) {
-                    //CallButton(isVideoCall = true, onCall)
-                    //CallButton(isVideoCall = false, onCall)
+                    CallButton(isVideoCall = true, onCall)
+                    CallButton(isVideoCall = false, onCall)
                 }
             }
         }
@@ -76,7 +78,8 @@ private fun LoungeContentPreview() {
             ),
             modifier = Modifier.fillMaxWidth(),
             shouldShowCallButtons = false,
-            onClick = {_, _ ->}
+            onClick = {_, _ ->},
+            onCall = {_ ->},
         )
     }
 }

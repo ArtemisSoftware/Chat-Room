@@ -21,6 +21,9 @@ class ChannelRepositoryImpl @Inject constructor(
     private val firebaseDatabase: DatabaseReference = Firebase
         .database(FirebaseConstant.FIREBASE_DATABASE_URL)
         .getReference(FirebaseConstant.CHANNEL_DATABASE_PATH),
+    private val firebaseChannelsDatabase: DatabaseReference = Firebase
+        .database(FirebaseConstant.FIREBASE_DATABASE_URL)
+        .getReference(FirebaseConstant.CHANNELS_DATABASE_PATH),
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ): ChannelRepository {
 
@@ -78,8 +81,7 @@ class ChannelRepositoryImpl @Inject constructor(
 
     override fun registerUserIdtoChannel(channelId: String) {
         val currentUser = firebaseAuth.currentUser
-        val ref = firebaseDatabase
-            .child("channels")
+        val ref = firebaseChannelsDatabase
             .child(channelId)
             .child("users")
 
@@ -97,5 +99,46 @@ class ChannelRepositoryImpl @Inject constructor(
             }
         )
 
+    }
+
+
+    override fun getAllUserEmails(channelId: String): Flow<Resource<List<String>>> = callbackFlow {
+        val listener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                val userIds = mutableListOf<String>()
+                dataSnapshot.children.forEach { it ->
+
+                    val email = it.value.toString()
+                    firebaseAuth.currentUser?.email?.let { userEmail ->
+                        if(email != userEmail){
+                            userIds.add(email)
+                        }
+                    }
+                }
+
+                trySend(Resource.Success(userIds)).isSuccess
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                trySend(
+                    Resource.Failure(
+                        DataError.FirebaseError.Error(error.message)
+                    )
+                ).isSuccess
+            }
+        }
+
+        firebaseChannelsDatabase
+            .child(channelId)
+            .child("users")
+            .addValueEventListener(listener)
+
+        // Remove listener when flow collection is cancelled
+        awaitClose {
+            firebaseChannelsDatabase.removeEventListener(listener)
+        }
     }
 }
