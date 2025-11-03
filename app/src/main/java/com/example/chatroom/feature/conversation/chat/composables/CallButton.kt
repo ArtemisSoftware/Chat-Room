@@ -9,18 +9,20 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
 
 @Composable
-internal fun CallButton(isVideoCall: Boolean, onClick: (ZegoSendCallInvitationButton) -> Unit) {
+internal fun CallButton(
+    callType: CallType,
+    onClick: (ZegoSendCallInvitationButton) -> Unit
+) {
     AndroidView(
         factory = { context: Context ->
 
             val button = ZegoSendCallInvitationButton(context)
-            button.setIsVideoCall(isVideoCall)
+            button.setIsVideoCall(callType == CallType.VIDEO)
             button.resourceID = "zego_data"
             button
         },
-        modifier = Modifier.size(50.dp)
+        modifier = Modifier.size(40.dp)
     ){ zegoCallButton ->
         zegoCallButton.setOnClickListener { _ -> onClick(zegoCallButton) }
     }
-
 }

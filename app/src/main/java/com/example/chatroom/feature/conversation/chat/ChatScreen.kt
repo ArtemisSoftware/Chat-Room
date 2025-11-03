@@ -32,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chatroom.core.presentation.composables.dialog.ContentSelectionDialog
 import com.example.chatroom.domain.models.Message
 import com.example.chatroom.feature.conversation.chat.composables.CallButton
+import com.example.chatroom.feature.conversation.chat.composables.CallType
 import com.example.chatroom.feature.conversation.chat.composables.ChatBubble
 import com.example.chatroom.feature.conversation.chat.composables.MessageSender
 import com.example.chatroom.feature.conversation.chat.mapper.toZegoUIKitUser
@@ -83,15 +84,16 @@ private fun ChatContent(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { /* do something */ }) {
-                        Icon(
-                            imageVector = Icons.Filled.Phone,
-                            contentDescription = ""
-                        )
-                    }
+                    CallButton(
+                        callType = CallType.AUDIO,
+                        onClick = { callButton->
+                            val zegoUIKitUsers = state.participants.toZegoUIKitUser()
+                            callButton.setInvitees(zegoUIKitUsers)
+                        }
+                    )
 
                     CallButton(
-                        isVideoCall = true,
+                        callType = CallType.VIDEO,
                         onClick = { callButton->
                             val zegoUIKitUsers = state.participants.toZegoUIKitUser()
                             callButton.setInvitees(zegoUIKitUsers)

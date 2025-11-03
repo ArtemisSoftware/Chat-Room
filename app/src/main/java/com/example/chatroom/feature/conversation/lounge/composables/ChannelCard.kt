@@ -25,9 +25,7 @@ import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationBut
 internal fun ChannelCard(
     channel: Channel,
     modifier: Modifier,
-    shouldShowCallButtons: Boolean = false,
-    onClick: (String, String) -> Unit,
-    onCall: (ZegoSendCallInvitationButton) -> Unit
+    onClick: (String, String) -> Unit
 ) {
 
     Card(
@@ -55,14 +53,6 @@ internal fun ChannelCard(
                     color = Color.White
                 )
             }
-            if (shouldShowCallButtons) {
-                Row(
-                    modifier = Modifier.align(Alignment.CenterEnd)
-                ) {
-                    CallButton(isVideoCall = true, onCall)
-                    CallButton(isVideoCall = false, onCall)
-                }
-            }
         }
     }
 }
@@ -77,9 +67,7 @@ private fun LoungeContentPreview() {
                 name = "Best one"
             ),
             modifier = Modifier.fillMaxWidth(),
-            shouldShowCallButtons = false,
             onClick = {_, _ ->},
-            onCall = {_ ->},
         )
     }
 }
