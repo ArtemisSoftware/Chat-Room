@@ -43,11 +43,10 @@ internal fun ChatBubble(
 
     Box(
         modifier = modifier
-            .padding(vertical = 4.dp, horizontal = 8.dp)
+            .padding(vertical = 0.dp, horizontal = 4.dp)
     ) {
         Row(
             modifier = Modifier
-                .padding(8.dp)
                 .align(alignment),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)

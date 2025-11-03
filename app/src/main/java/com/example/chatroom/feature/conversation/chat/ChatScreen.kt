@@ -4,14 +4,15 @@ package com.example.chatroom.feature.conversation.chat
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -21,8 +22,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,8 +39,8 @@ import com.example.chatroom.feature.conversation.chat.composables.CallType
 import com.example.chatroom.feature.conversation.chat.composables.ChatBubble
 import com.example.chatroom.feature.conversation.chat.composables.MessageSender
 import com.example.chatroom.feature.conversation.chat.mapper.toZegoUIKitUser
+import com.example.chatroom.ui.theme.ChatBackgroundColors
 import com.example.chatroom.ui.theme.ChatRoomTheme
-import com.zegocloud.uikit.service.defines.ZegoUIKitUser
 
 @Composable
 internal fun ChatScreen(
@@ -60,6 +63,13 @@ private fun ChatContent(
     navigateBack: () -> Unit,
     onEvent: (ChatEvent) -> Unit
 ) {
+    val listState = rememberLazyListState()
+    LaunchedEffect(state.messages.size) {
+        if (state.messages.isNotEmpty()) {
+            listState.animateScrollToItem(state.messages.lastIndex)
+        }
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -104,12 +114,21 @@ private fun ChatContent(
         }
     ) {
 
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .padding(it)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
         ) {
             LazyColumn(
-                modifier = Modifier.fillMaxWidth()
+                state = listState,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = ChatBackgroundColors
+                        )
+                    )
             ) {
                 items(state.messages) { message ->
                     ChatBubble(
@@ -122,8 +141,6 @@ private fun ChatContent(
             MessageSender(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(8.dp)
                     .background(Color.LightGray),
                 message = state.text.orEmpty(),
                 onMessageUpdate = { onEvent(ChatEvent.UpdateText(it)) },

@@ -107,43 +107,13 @@ private fun LoungeContent(
 
                     item {
                         Text(
-                            text = "Messages",
+                            text = "Lounges",
                             color = Color.Gray,
                             style = TextStyle(
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Black
                             ),
                             modifier = Modifier.padding(16.dp)
-                        )
-                    }
-
-                    item {
-                        TextField(
-                            value = "",
-                            onValueChange = {},
-                            placeholder = { Text(text = "Search...") },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp)
-                                .clip(
-                                    RoundedCornerShape(40.dp)
-                                ),
-                            textStyle = TextStyle(color = Color.LightGray),
-                            colors = TextFieldDefaults.colors().copy(
-                                focusedContainerColor = DarkGrey,
-                                unfocusedContainerColor = DarkGrey,
-                                focusedTextColor = Color.Gray,
-                                unfocusedTextColor = Color.Gray,
-                                focusedPlaceholderColor = Color.Gray,
-                                unfocusedPlaceholderColor = Color.Gray,
-                                focusedIndicatorColor = Color.Gray
-                            ),
-                            trailingIcon = {
-                                Icon(
-                                    imageVector = Icons.Filled.Search,
-                                    contentDescription = null
-                                )
-                            }
                         )
                     }
 
