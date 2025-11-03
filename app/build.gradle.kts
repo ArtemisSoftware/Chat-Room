@@ -91,6 +91,11 @@ dependencies {
     implementation (libs.supabase.storage)
     implementation (libs.supabase.auth)
 
+
+    implementation (libs.ktor.client.android)
+    implementation (libs.ktor.client.core)
+    implementation (libs.ktor.utils)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
