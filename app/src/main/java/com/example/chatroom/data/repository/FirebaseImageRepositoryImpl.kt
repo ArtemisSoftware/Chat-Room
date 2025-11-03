@@ -10,12 +10,10 @@ import com.google.firebase.storage.storage
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
 
-class ImageRepositoryImpl(
+class FirebaseImageRepositoryImpl(
     private val firebaseStorage: FirebaseStorage = Firebase.storage
 ): ImageRepository {
     override suspend fun storeImage(uri: String): Resource<String> {
-        val fileUri = uri.toUri()
-        val imageRef = firebaseStorage.reference.child("images/${UUID.randomUUID()}")
 
         // TODO: check if logic can be changed to suspend corotine
         return try {
@@ -30,7 +28,7 @@ class ImageRepositoryImpl(
 
             Resource.Success(downloadUri.toString())
         } catch (e: Exception) {
-            Resource.Failure(DataError.FirebaseError.Error(e.message ?: "Unknown error"))
+            Resource.Failure(DataError.FirebaseError.Error(e.message))
         }
         /*
         return suspendCoroutine { continuation ->

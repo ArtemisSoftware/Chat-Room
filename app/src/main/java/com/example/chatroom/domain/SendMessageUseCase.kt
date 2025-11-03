@@ -6,10 +6,11 @@ import com.example.chatroom.domain.repository.ChatRepository
 import com.example.chatroom.domain.repository.ImageRepository
 import com.example.chatroom.domain.repository.NotificationRepository
 import javax.inject.Inject
+import javax.inject.Named
 
 class SendMessageUseCase @Inject constructor(
     private val chatRepository: ChatRepository,
-    private val imageRepository: ImageRepository,
+    @Named("supabase_image_repo") private val imageRepository: ImageRepository,
     private val notificationRepository: NotificationRepository
 ) {
     suspend operator fun invoke(

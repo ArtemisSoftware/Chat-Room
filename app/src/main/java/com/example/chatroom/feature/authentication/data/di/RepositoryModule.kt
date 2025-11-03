@@ -8,14 +8,17 @@ import com.example.chatroom.domain.repository.AuthenticationRepository
 import com.example.chatroom.domain.repository.ChannelRepository
 import com.example.chatroom.domain.repository.ChatRepository
 import com.example.chatroom.domain.repository.ImageRepository
-import com.example.chatroom.data.repository.ImageRepositoryImpl
+import com.example.chatroom.data.repository.FirebaseImageRepositoryImpl
 import com.example.chatroom.data.repository.NotificationRepositoryImpl
+import com.example.chatroom.data.repository.SupabaseImageRepositoryImpl
 import com.example.chatroom.domain.repository.NotificationRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.github.jan.supabase.SupabaseClient
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -42,8 +45,19 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideImageRepository(): ImageRepository {
-        return ImageRepositoryImpl()
+    @Named("firebase_image_repo")
+    fun provideFirebaseImageRepository(): ImageRepository {
+        return FirebaseImageRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    @Named("supabase_image_repo")
+    fun provideSupabaseImageRepository(
+        @ApplicationContext context: Context,
+        supabaseClient: SupabaseClient
+    ): ImageRepository {
+        return SupabaseImageRepositoryImpl(context = context, supabaseClient = supabaseClient)
     }
 
     @Provides
