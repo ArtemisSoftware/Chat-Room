@@ -110,7 +110,7 @@ private fun LoungeContent(
                             text = "Lounges",
                             color = Color.Gray,
                             style = TextStyle(
-                                fontSize = 20.sp,
+                                fontSize = 24.sp,
                                 fontWeight = FontWeight.Black
                             ),
                             modifier = Modifier.padding(16.dp)

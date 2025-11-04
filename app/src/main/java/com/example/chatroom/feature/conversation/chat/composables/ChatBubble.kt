@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.chatroom.R
+import com.example.chatroom.core.presentation.composables.icon.AcronymIcon
 import com.example.chatroom.domain.models.Message
 import com.example.chatroom.feature.conversation.chat.mapper.toColor
 import com.example.chatroom.ui.theme.ChatRoomTheme
@@ -52,10 +53,8 @@ internal fun ChatBubble(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             if (!message.isMyMessage) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_friend),
-                    contentDescription = null,
-                    modifier = Modifier.size(40.dp)
+                AcronymIcon(
+                    name = message.senderName
                 )
             }
 

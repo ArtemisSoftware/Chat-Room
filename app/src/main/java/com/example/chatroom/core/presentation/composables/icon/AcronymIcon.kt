@@ -38,7 +38,6 @@ fun AcronymIcon(
             .size(48.dp)
             .clip(CircleShape)
             .background(color.copy(alpha = 0.3f))
-
     ) {
         Text(
             text = name[0].uppercase(),

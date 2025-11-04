@@ -47,7 +47,7 @@ internal fun SignInScreen(
     ManageUIEvents(
         uiEvent = viewModel.uiEvent,
         onNavigateWithRoute = {
-            when(it){
+            when(it.value){
                 OtherRoute.Lounge -> navigateToLounge()
             }
         }

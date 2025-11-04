@@ -108,26 +108,6 @@ class ChatViewModel @Inject constructor(
                             update { it.copy(participants = result) }
                         }
                 }
-            /*
-            .onSuccess {
-                val list: MutableList<ZegoUIKitUser> = mutableListOf()
-                it.forEach { email ->
-                    Firebase.auth.currentUser?.email?.let { em ->
-                        if(email != em){
-                            list.add(
-                                ZegoUIKitUser(
-                                    email, email
-                                )
-                            )
-                        }
-                    }
-                }
-                callButton.setInvitees(list)
-            }
-            .onFailure {
-
-            }
-        */
         }
     }
 }
