@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatroom.ui.theme.Blue
@@ -29,18 +30,19 @@ private val IconColors = listOf(Red, Green, Blue, Yellow, Orange, Cyan)
 @Composable
 fun AcronymIcon(
     name: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    size: Dp = 48.dp
 ) {
     val color = IconColors[abs(name.hashCode()) % IconColors.size]
     Box(
         modifier = modifier
             .padding(8.dp)
-            .size(48.dp)
+            .size(size)
             .clip(CircleShape)
             .background(color.copy(alpha = 0.3f))
     ) {
         Text(
-            text = name[0].uppercase(),
+            text = if(name.isBlank()) "%" else name[0].uppercase(),
             fontSize = 28.sp,
             color = Color.White,
             textAlign = TextAlign.Center,

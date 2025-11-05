@@ -52,7 +52,8 @@ internal fun ChatBubble(
         ) {
             if (!message.isMyMessage) {
                 AcronymIcon(
-                    name = message.senderName
+                    name = message.senderName,
+                    size = 24.dp
                 )
             }
 

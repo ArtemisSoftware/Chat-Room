@@ -34,6 +34,7 @@ class ChatViewModel @Inject constructor(
 
     init {
         getData()
+        register()
         listenMessages()
         getChatParticipants()
     }
@@ -42,7 +43,7 @@ class ChatViewModel @Inject constructor(
         val channelName = savedStateHandle.get<String>(ConversationRoute.Chat::channelName.name)
         channelId = savedStateHandle.get<String>(ConversationRoute.Chat::channelId.name).orEmpty()
 
-        update { it.copy(channelName = channelName.orEmpty()) }
+        update { it.copy(channelName = channelName.orEmpty(),) }
     }
 
     fun onTriggerEvent(event: ChatEvent){
@@ -60,25 +61,25 @@ class ChatViewModel @Inject constructor(
                 .collect { result ->
                     result
                         .onSuccess { result ->
-                            update { it.copy(messages = result) }
+                            update { it.copy(messages = result,) }
                         }
                         .onFailure { error ->
-                            update { it.copy(error = error.toText()) }
+                            update { it.copy(error = error.toText(),) }
                         }
                 }
         }
     }
 
     private fun updateText(text: String) = with(_state){
-        update { it.copy(text = text) }
+        update { it.copy(text = text,) }
     }
 
     private fun updateImage(uri: Uri) = with(_state){
-        update { it.copy(imageUri = uri.toString()) }
+        update { it.copy(imageUri = uri.toString(),) }
     }
 
     private fun showContentDialog(show: Boolean) = with(_state){
-        update { it.copy(showMediaContentDialog = show) }
+        update { it.copy(showMediaContentDialog = show,) }
     }
 
     private fun sendMessage() = with(_state.value){
@@ -90,7 +91,7 @@ class ChatViewModel @Inject constructor(
                     imageUri = imageUri
                 )
 
-            _state.update { it.copy(text = null, imageUri = null) }
+            _state.update { it.copy() }
         }
     }
 
@@ -101,9 +102,16 @@ class ChatViewModel @Inject constructor(
                 .collect { result ->
                     result
                         .onSuccess {  result ->
-                            update { it.copy(participants = result) }
+                            update { it.copy(participants = result,) }
                         }
                 }
+        }
+    }
+
+    private fun register() = with(_state){
+        viewModelScope.launch {
+            val result = registerToChannelUseCase(channelId = channelId)
+            update { it.copy(registerData = result) }
         }
     }
 }

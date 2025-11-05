@@ -80,7 +80,6 @@ class ChannelRepositoryImpl @Inject constructor(
         }
     }
 
-
     override suspend fun registerUserIdToChannel(channelId: String): Resource<Unit> {
         val currentUser = firebaseAuth.currentUser
             ?: return Resource.Failure(DataError.FirebaseError.NoUserFound)

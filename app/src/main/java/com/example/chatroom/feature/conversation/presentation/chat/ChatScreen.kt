@@ -22,13 +22,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.chatroom.R
 import com.example.chatroom.core.presentation.composables.dialog.ContentSelectionDialog
 import com.example.chatroom.domain.models.Message
 import com.example.chatroom.feature.conversation.presentation.chat.composables.CallButton
@@ -76,11 +80,22 @@ private fun ChatContent(
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text(
-                        text = state.channelName,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = state.channelName,
+                            maxLines = 1,
+                            fontSize = 20.sp,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Text(
+                            text = (state.participants.size + 1).toString() + " " + stringResource(R.string.participants),
+                            maxLines = 1,
+                            fontSize = 14.sp,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 },
                 navigationIcon = {
                     IconButton(onClick = navigateBack) {
@@ -192,7 +207,7 @@ private fun ChatContentPreview() {
                         message = "THe 3 message",
                         createdAt = 3L,
                     )
-                )
+                ),
             ),
             onEvent = {},
             navigateBack = {}
