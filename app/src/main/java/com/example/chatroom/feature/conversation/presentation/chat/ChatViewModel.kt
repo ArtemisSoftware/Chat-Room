@@ -1,18 +1,15 @@
-package com.example.chatroom.feature.conversation.chat
+package com.example.chatroom.feature.conversation.presentation.chat
 
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatroom.domain.ListenToMessagesUseCase
+import com.example.chatroom.core.presentation.util.extensions.toText
 import com.example.chatroom.domain.SendMessageUseCase
-import com.example.chatroom.domain.repository.ChannelRepository
+import com.example.chatroom.feature.conversation.domain.repository.ChannelRepository
 import com.example.chatroom.domain.repository.ChatRepository
-import com.example.chatroom.feature.conversation.navigation.ConversationRoute
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
-import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
-import com.zegocloud.uikit.service.defines.ZegoUIKitUser
+import com.example.chatroom.feature.conversation.domain.usecase.RegisterToChannelUseCase
+import com.example.chatroom.feature.conversation.presentation.navigation.ConversationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,9 +20,9 @@ import kotlin.text.orEmpty
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val channelRepository: ChannelRepository,
     private val chatRepository: ChatRepository,
-    private val listenToMessagesUseCase: ListenToMessagesUseCase,
+    private val channelRepository: ChannelRepository,
+    private val registerToChannelUseCase: RegisterToChannelUseCase,
     private val sendMessageUseCase: SendMessageUseCase,
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
@@ -59,14 +56,14 @@ class ChatViewModel @Inject constructor(
 
     private fun listenMessages() = with(_state){
         viewModelScope.launch {
-            listenToMessagesUseCase(channelId = channelId)
+            chatRepository.listenForMessages(channelId = channelId)
                 .collect { result ->
                     result
                         .onSuccess { result ->
                             update { it.copy(messages = result) }
                         }
-                        .onFailure {
-                            //TODO: add error
+                        .onFailure { error ->
+                            update { it.copy(error = error.toText()) }
                         }
                 }
         }
@@ -84,19 +81,18 @@ class ChatViewModel @Inject constructor(
         update { it.copy(showMediaContentDialog = show) }
     }
 
-    private fun sendMessage() {
+    private fun sendMessage() = with(_state.value){
         viewModelScope.launch {
             sendMessageUseCase
                 .invoke(
                     channelId = channelId,
-                    text = _state.value.text,
-                    imageUri = _state.value.imageUri
+                    text = text,
+                    imageUri = imageUri
                 )
 
             _state.update { it.copy(text = null, imageUri = null) }
         }
     }
-
 
     private fun getChatParticipants() = with(_state){
         viewModelScope.launch {

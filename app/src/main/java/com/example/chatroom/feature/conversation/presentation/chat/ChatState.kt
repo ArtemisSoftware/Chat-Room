@@ -1,4 +1,4 @@
-package com.example.chatroom.feature.conversation.chat
+package com.example.chatroom.feature.conversation.presentation.chat
 
 import com.example.chatroom.domain.models.Message
 
@@ -9,4 +9,5 @@ data class ChatState(
     val text: String? = null,
     val imageUri: String? = null,
     val showMediaContentDialog: Boolean = false,
+    val error: String? = null,
 )

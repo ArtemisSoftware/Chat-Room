@@ -1,37 +1,36 @@
-package com.example.chatroom.data.repository
+package com.example.chatroom.feature.conversation.data.repository
 
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
 import com.example.chatroom.data.constants.FirebaseConstant
 import com.example.chatroom.domain.models.Channel
-import com.example.chatroom.domain.repository.ChannelRepository
+import com.example.chatroom.feature.conversation.domain.repository.ChannelRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class ChannelRepositoryImpl @Inject constructor(
-    private val firebaseDatabase: DatabaseReference = Firebase
-        .database(FirebaseConstant.FIREBASE_DATABASE_URL)
-        .getReference(FirebaseConstant.CHANNEL_DATABASE_PATH),
-    private val firebaseChannelsDatabase: DatabaseReference = Firebase
-        .database(FirebaseConstant.FIREBASE_DATABASE_URL)
-        .getReference(FirebaseConstant.CHANNELS_DATABASE_PATH),
+    private val channelDbRef: DatabaseReference,
+    private val loungeDbRef: DatabaseReference,
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ): ChannelRepository {
 
     override fun getChannels(): Flow<Resource<List<Channel>>> = callbackFlow {
         val listener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
+                // This method is called once with the initial value and again whenever data at this location is updated.
 
                 val channels = mutableListOf<Channel>()
                 dataSnapshot.children.forEach { data ->
@@ -53,67 +52,70 @@ class ChannelRepositoryImpl @Inject constructor(
             }
         }
 
-        firebaseDatabase.addValueEventListener(listener)
+        channelDbRef.addValueEventListener(listener)
 
         // Remove listener when flow collection is cancelled
         awaitClose {
-            firebaseDatabase.removeEventListener(listener)
+            channelDbRef.removeEventListener(listener)
         }
     }
 
-    override suspend fun addChannel(name: String) {
-        val key = firebaseDatabase.push().key
-        key?.let {
-            firebaseDatabase
-                .child(it)
-                .setValue(name)
-                .addOnFailureListener {
-                    //TODO: add error
-                    /*
-                    Resource.Failure(
-                        DataError.FirebaseError.Error(error.message)
-                    )
-                    */
-                }
-        }
-    }
-
-
-    override fun registerUserIdtoChannel(channelId: String) {
-        val currentUser = firebaseAuth.currentUser
-        val ref = firebaseChannelsDatabase
-            .child(channelId)
-            .child("users")
-
-        ref
-            .child(currentUser?.uid ?: "")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (!snapshot.exists()) {
-                        ref.child(currentUser?.uid ?: "").setValue(currentUser?.email)
+    override suspend fun addChannel(name: String): Resource<Unit> {
+        return suspendCoroutine { continuation ->
+            channelDbRef.push().key?.let {
+                channelDbRef
+                    .child(it)
+                    .setValue(name)
+                    .addOnSuccessListener {
+                        continuation.resume(Resource.Success(Unit))
                     }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                }
+                    .addOnFailureListener { error ->
+                        continuation.resume(
+                            Resource.Failure(
+                                DataError.FirebaseError.Error(error.message)
+                            )
+                        )
+                    }
             }
-        )
-
+        }
     }
+
+
+    override suspend fun registerUserIdToChannel(channelId: String): Resource<Unit> {
+        val currentUser = firebaseAuth.currentUser
+            ?: return Resource.Failure(DataError.FirebaseError.NoUserFound)
+
+        val ref = getUsersDbRef(channelId)
+            .child(currentUser.uid)
+
+        return try {
+            // Check if user already exists in channel
+            val snapshot = ref.get().await()
+            if (!snapshot.exists()) {
+                // Add user and wait for completion
+                ref.setValue(currentUser.email).await()
+            }
+
+            Resource.Success(Unit)
+        } catch (e: Exception) {
+            Resource.Failure(DataError.FirebaseError.Error(e.message))
+        }
+    }
+
+
 
 
     override fun getAllUserEmails(channelId: String): Flow<Resource<List<String>>> = callbackFlow {
         val listener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
+                // This method is called once with the initial value and again whenever data at this location is updated.
 
                 val userIds = mutableListOf<String>()
                 dataSnapshot.children.forEach { it ->
 
                     val email = it.value.toString()
                     firebaseAuth.currentUser?.email?.let { userEmail ->
-                        if(email != userEmail){
+                        if (email != userEmail) {
                             userIds.add(email)
                         }
                     }
@@ -131,14 +133,16 @@ class ChannelRepositoryImpl @Inject constructor(
             }
         }
 
-        firebaseChannelsDatabase
-            .child(channelId)
-            .child("users")
+        getUsersDbRef(channelId)
             .addValueEventListener(listener)
 
         // Remove listener when flow collection is cancelled
         awaitClose {
-            firebaseChannelsDatabase.removeEventListener(listener)
+            loungeDbRef.removeEventListener(listener)
         }
     }
+
+    private fun getUsersDbRef(channelId: String): DatabaseReference = loungeDbRef
+        .child(channelId)
+        .child("users")
 }

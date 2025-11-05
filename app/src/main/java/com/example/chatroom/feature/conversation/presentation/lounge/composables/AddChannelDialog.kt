@@ -1,4 +1,4 @@
-package com.example.chatroom.feature.conversation.lounge.composables
+package com.example.chatroom.feature.conversation.presentation.lounge.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

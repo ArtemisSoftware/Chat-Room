@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatroom.feature.authentication.domain.repository.AuthenticationRepository
 import com.example.chatroom.feature.authentication.presentation.navigation.AuthenticationRoute
-import com.example.chatroom.feature.conversation.navigation.ConversationRoute
+import com.example.chatroom.feature.conversation.presentation.navigation.ConversationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

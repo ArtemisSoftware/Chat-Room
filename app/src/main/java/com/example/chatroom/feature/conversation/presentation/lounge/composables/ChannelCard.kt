@@ -1,4 +1,4 @@
-package com.example.chatroom.feature.conversation.lounge.composables
+package com.example.chatroom.feature.conversation.presentation.lounge.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -17,9 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chatroom.domain.models.Channel
 import com.example.chatroom.core.presentation.composables.icon.AcronymIcon
-import com.example.chatroom.feature.conversation.chat.composables.CallButton
 import com.example.chatroom.ui.theme.ChatRoomTheme
-import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton
 
 @Composable
 internal fun ChannelCard(

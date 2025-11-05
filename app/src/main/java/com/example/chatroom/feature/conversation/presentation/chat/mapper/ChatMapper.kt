@@ -1,4 +1,4 @@
-package com.example.chatroom.feature.conversation.chat.mapper
+package com.example.chatroom.feature.conversation.presentation.chat.mapper
 
 import androidx.compose.ui.graphics.Color
 import com.example.chatroom.domain.models.Message

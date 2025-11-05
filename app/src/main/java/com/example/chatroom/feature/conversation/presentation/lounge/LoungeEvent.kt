@@ -1,4 +1,4 @@
-package com.example.chatroom.feature.conversation.lounge
+package com.example.chatroom.feature.conversation.presentation.lounge
 
 sealed interface LoungeEvent {
     data object AddChanel: LoungeEvent

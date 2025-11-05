@@ -1,23 +1,15 @@
-package com.example.chatroom.feature.conversation.lounge
+package com.example.chatroom.feature.conversation.presentation.lounge
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.chatroom.domain.models.Channel
-import com.example.chatroom.domain.repository.ChannelRepository
-import com.google.firebase.Firebase
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.database
+import com.example.chatroom.core.presentation.util.extensions.toText
+import com.example.chatroom.feature.conversation.domain.repository.ChannelRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.text.get
 
 @HiltViewModel
 internal class LoungeViewModel @Inject constructor(
@@ -48,8 +40,10 @@ internal class LoungeViewModel @Inject constructor(
                         .onSuccess { result ->
                             update { it.copy(channels = result) }
                         }
-                            .onFailure {  }
+                        .onFailure { error ->
+                            update { it.copy(error = error.toText()) }
                         }
+                    }
         }
     }
 
@@ -65,7 +59,12 @@ internal class LoungeViewModel @Inject constructor(
         if(!newChannel.isNullOrEmpty()) {
             viewModelScope.launch {
                 channelRepository.addChannel(name = newChannel)
-                _state.update { it.copy(newChannel = null, showChannelDialog = false) }
+                    .onSuccess {
+                        _state.update { it.copy(newChannel = null, showChannelDialog = false) }
+                    }
+                    .onFailure { error ->
+                        _state.update { it.copy(error = error.toText()) }
+                    }
             }
         }
     }

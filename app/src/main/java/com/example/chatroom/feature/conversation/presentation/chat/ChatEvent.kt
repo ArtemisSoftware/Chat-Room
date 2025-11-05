@@ -1,4 +1,4 @@
-package com.example.chatroom.feature.conversation.chat
+package com.example.chatroom.feature.conversation.presentation.chat
 
 import android.net.Uri
 import com.zegocloud.uikit.prebuilt.call.invite.widget.ZegoSendCallInvitationButton

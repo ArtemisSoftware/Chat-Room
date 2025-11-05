@@ -3,6 +3,7 @@ package com.example.chatroom.feature.authentication.presentation.signup
 import androidx.lifecycle.viewModelScope
 import com.example.chatroom.core.presentation.event.UiEvent
 import com.example.chatroom.core.presentation.event.UiEventViewModel
+import com.example.chatroom.core.presentation.util.extensions.toText
 import com.example.chatroom.feature.authentication.domain.repository.AuthenticationRepository
 import com.example.chatroom.feature.authentication.presentation.navigation.OtherRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,8 +42,8 @@ internal class SignUpViewModel @Inject constructor(
                     _state.update { it.copy(isLoading = false) }
                     sendUiEvent(uiEvent = UiEvent.NavigateWithRoute(OtherRoute.Lounge))
                 }
-                .onFailure {
-                    _state.update { it.copy(isLoading = false, error = it.error) }
+                .onFailure { error ->
+                    _state.update { it.copy(isLoading = false, error = error.toText()) }
                 }
         }
     }

@@ -1,9 +1,8 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.chatroom.feature.conversation.chat
+package com.example.chatroom.feature.conversation.presentation.chat
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,22 +22,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chatroom.core.presentation.composables.dialog.ContentSelectionDialog
 import com.example.chatroom.domain.models.Message
-import com.example.chatroom.feature.conversation.chat.composables.CallButton
-import com.example.chatroom.feature.conversation.chat.composables.CallType
-import com.example.chatroom.feature.conversation.chat.composables.ChatBubble
-import com.example.chatroom.feature.conversation.chat.composables.MessageSender
-import com.example.chatroom.feature.conversation.chat.mapper.toZegoUIKitUser
+import com.example.chatroom.feature.conversation.presentation.chat.composables.CallButton
+import com.example.chatroom.feature.conversation.presentation.chat.composables.CallType
+import com.example.chatroom.feature.conversation.presentation.chat.composables.ChatBubble
+import com.example.chatroom.feature.conversation.presentation.chat.composables.MessageSender
+import com.example.chatroom.feature.conversation.presentation.chat.mapper.toZegoUIKitUser
 import com.example.chatroom.ui.theme.ChatBackgroundColors
 import com.example.chatroom.ui.theme.ChatRoomTheme
 

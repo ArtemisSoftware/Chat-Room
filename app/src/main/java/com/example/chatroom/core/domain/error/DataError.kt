@@ -17,8 +17,4 @@ sealed interface DataError : CRError {
         data class Error(val message: String? = "Unknown error") : ChatError()
         data object MessageNotSent : ChatError()
     }
-
-    sealed class NetworkError : DataError {
-        data class Error(val message: String) : NetworkError()
-    }
 }

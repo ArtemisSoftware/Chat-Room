@@ -1,4 +1,4 @@
-package com.example.chatroom.feature.conversation.chat.composables
+package com.example.chatroom.feature.conversation.presentation.chat.composables
 
 import android.content.Context
 import androidx.compose.foundation.layout.size

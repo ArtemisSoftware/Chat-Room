@@ -1,10 +1,10 @@
-package com.example.chatroom.feature.conversation.navigation
+package com.example.chatroom.feature.conversation.presentation.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.example.chatroom.feature.conversation.chat.ChatScreen
-import com.example.chatroom.feature.conversation.lounge.LoungeScreen
+import com.example.chatroom.feature.conversation.presentation.chat.ChatScreen
+import com.example.chatroom.feature.conversation.presentation.lounge.LoungeScreen
 
 const val CONVERSATION_GRAPH = "conversation_graph"
 
