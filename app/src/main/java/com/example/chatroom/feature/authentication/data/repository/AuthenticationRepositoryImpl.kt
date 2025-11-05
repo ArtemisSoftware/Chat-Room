@@ -1,8 +1,8 @@
-package com.example.chatroom.data.repository
+package com.example.chatroom.feature.authentication.data.repository
 
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
-import com.example.chatroom.domain.repository.AuthenticationRepository
+import com.example.chatroom.feature.authentication.domain.repository.AuthenticationRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import javax.inject.Inject
@@ -30,9 +30,9 @@ class AuthenticationRepositoryImpl @Inject constructor(
                     if (task.isSuccessful) {
                         task.result.user?.let {
                             it.updateProfile(
-                            UserProfileChangeRequest.Builder()
-                                .setDisplayName(name)
-                                .build()
+                                UserProfileChangeRequest.Builder()
+                                    .setDisplayName(name)
+                                    .build()
                             ).addOnCompleteListener { updateTask ->
                                 if (updateTask.isSuccessful) {
                                     continuation.resume(Resource.Success(Unit))
@@ -53,7 +53,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                         )
                     } else {
                         continuation.resume(
-                        Resource.Failure(DataError.FirebaseError.Error(task.exception?.message))
+                            Resource.Failure(DataError.FirebaseError.Error(task.exception?.message))
                         )
                     }
                 }

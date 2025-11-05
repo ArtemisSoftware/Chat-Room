@@ -1,4 +1,4 @@
-package com.example.chatroom.feature.authentication.navigation
+package com.example.chatroom.feature.authentication.presentation.navigation
 
 import kotlinx.serialization.Serializable
 

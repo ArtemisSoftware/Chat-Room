@@ -1,4 +1,4 @@
-package com.example.chatroom.domain.repository
+package com.example.chatroom.feature.authentication.domain.repository
 
 import com.example.chatroom.core.domain.Resource
 

@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.example.chatroom.feature.authentication.navigation.AuthenticationRoute
-import com.example.chatroom.feature.authentication.navigation.authenticationNavGraph
+import com.example.chatroom.feature.authentication.presentation.navigation.AuthenticationRoute
+import com.example.chatroom.feature.authentication.presentation.navigation.authenticationNavGraph
 import com.example.chatroom.feature.conversation.navigation.ConversationRoute
 import com.example.chatroom.feature.conversation.navigation.conversationNavGraph
 

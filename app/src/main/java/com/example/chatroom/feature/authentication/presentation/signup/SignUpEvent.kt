@@ -1,4 +1,4 @@
-package com.example.chatroom.feature.authentication.signup
+package com.example.chatroom.feature.authentication.presentation.signup
 
 internal sealed interface SignUpEvent {
     data class UpdateEmail(val email: String): SignUpEvent

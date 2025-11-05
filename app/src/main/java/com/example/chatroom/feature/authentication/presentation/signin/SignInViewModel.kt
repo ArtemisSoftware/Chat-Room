@@ -1,11 +1,10 @@
-package com.example.chatroom.feature.authentication.signin
+package com.example.chatroom.feature.authentication.presentation.signin
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatroom.core.presentation.event.UiEvent
 import com.example.chatroom.core.presentation.event.UiEventViewModel
-import com.example.chatroom.domain.repository.AuthenticationRepository
-import com.example.chatroom.feature.authentication.navigation.OtherRoute
+import com.example.chatroom.feature.authentication.domain.repository.AuthenticationRepository
+import com.example.chatroom.feature.authentication.presentation.navigation.OtherRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,7 +30,7 @@ internal class SignInViewModel @Inject constructor(
 
     private fun signIn() = with(_state.value) {
 
-        _state.update { it.copy(isLoading = true) }
+        _state.update { it.copy(isLoading = true, error = null) }
 
         viewModelScope.launch {
             authenticationRepository
@@ -41,8 +40,7 @@ internal class SignInViewModel @Inject constructor(
                     sendUiEvent(uiEvent = UiEvent.NavigateWithRoute(OtherRoute.Lounge))
                 }
                 .onFailure {
-                    _state.update { it.copy(isLoading = false) }
-                    //TODO: enviar evento
+                    _state.update { it.copy(isLoading = false, error = it.error) }
                 }
         }
     }

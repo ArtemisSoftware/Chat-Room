@@ -1,4 +1,4 @@
-package com.example.chatroom.feature.authentication.signup
+package com.example.chatroom.feature.authentication.presentation.signin
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,20 +28,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chatroom.R
 import com.example.chatroom.core.presentation.composables.event.ManageUIEvents
-import com.example.chatroom.feature.authentication.navigation.OtherRoute
+import com.example.chatroom.core.presentation.composables.text.ErrorDisplay
+import com.example.chatroom.feature.authentication.presentation.navigation.OtherRoute
 
 @Composable
-internal fun SignUpScreen(
-    viewModel: SignUpViewModel = hiltViewModel(),
-    navigateToSignIn: () -> Unit,
+internal fun SignInScreen(
+    viewModel: SignInViewModel = hiltViewModel(),
+    navigateToSingUp:() -> Unit,
     navigateToLounge: () -> Unit
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value
 
-    SignUpContent(
+    SignInContent(
         state = state,
-        navigateToSignIn = navigateToSignIn,
-        event = viewModel::onTriggerEvent
+        event = viewModel::onTriggerEvent,
+        navigateToSingUp = navigateToSingUp
     )
 
     ManageUIEvents(
@@ -54,29 +55,13 @@ internal fun SignUpScreen(
     )
 }
 
+
 @Composable
-private fun SignUpContent(
-    state: SignUpState,
-    navigateToSignIn: () -> Unit,
-    event: (SignUpEvent) -> Unit
+private fun SignInContent(
+    state: SignInState,
+    event: (SignInEvent) -> Unit,
+    navigateToSingUp:() -> Unit
 ) {
- /*
-    val context = LocalContext.current
-    LaunchedEffect(key1 = uiState.value) {
-
-        when (uiState.value) {
-            is SignUpState.Success -> {
-                navController.navigate("home")
-            }
-
-            is SignUpState.Error -> {
-                Toast.makeText(context, "Sign In failed", Toast.LENGTH_SHORT).show()
-            }
-
-            else -> {}
-        }
-    }
-*/
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
@@ -90,71 +75,65 @@ private fun SignUpContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.logo),
+                painter = painterResource(id = R.drawable.ic_logo),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(200.dp)
+                    .size(140.dp)
                     .background(Color.White)
             )
             OutlinedTextField(
-                value = state.name,
-                onValueChange = { event(SignUpEvent.UpdateName(it)) },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text(text = stringResource(R.string.full_name)) }
-            )
-
-            OutlinedTextField(
                 value = state.email,
-                onValueChange = { event(SignUpEvent.UpdateEmail(it)) },
+                onValueChange = { event(SignInEvent.UpdateEmail(email = it)) },
                 modifier = Modifier.fillMaxWidth(),
-                label = { Text(text = stringResource(R.string.email)) })
-
+                label = {
+                    Text(text = stringResource(R.string.email))
+                }
+            )
             OutlinedTextField(
                 value = state.password,
-                onValueChange = { event(SignUpEvent.UpdatePassword(it)) },
+                onValueChange = { event(SignInEvent.UpdatePassword(it)) },
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = stringResource(R.string.password)) },
                 visualTransformation = PasswordVisualTransformation()
             )
-
-            OutlinedTextField(
-                value = state.passwordConfirm,
-                onValueChange = { event(SignUpEvent.UpdatePasswordConfirm(it)) },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text(text = stringResource(R.string.confirm_password)) },
-                visualTransformation = PasswordVisualTransformation(),
-                isError = state.hasValidPasswords()
-            )
             Spacer(modifier = Modifier.size(16.dp))
-            if (state.isLoading) {
-                CircularProgressIndicator()
-            } else {
-                Button(
-                    onClick = { event(SignUpEvent.SignUp) },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = state.hasValidCredentials(),
-                    content = {
-                        Text(text = stringResource(R.string.sign_up))
-                    }
-                )
-                TextButton(
-                    onClick = navigateToSignIn,
-                    content = {
-                        Text(text = stringResource(R.string.already_have_an_account_sign_in))
-                    }
-                )
-            }
 
+            when{
+                state.isLoading -> {
+                    CircularProgressIndicator()
+                }
+                state.error != null -> {
+                    ErrorDisplay(
+                        modifier = Modifier.fillMaxWidth(.9F),
+                        message = state.error
+                    )
+                }
+                else -> {
+                    Button(
+                        onClick = { event(SignInEvent.SignIn) },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = state.hasValidCredentials()
+                    ) {
+                        Text(text = stringResource(R.string.sign_in))
+                    }
+
+                    TextButton(
+                        onClick = navigateToSingUp
+                    ) {
+                        Text(text = stringResource(R.string.don_t_have_an_account_sign_up))
+                    }
+                }
+            }
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun SignUpContentPreview() {
-    SignUpContent(
-        navigateToSignIn = {},
+private fun SignInContentPreview() {
+    SignInContent(
+        navigateToSingUp = {},
         event = {},
-        state = SignUpState(email = "email@email.com", password = "1234")
+        state = SignInState(email = "email@email.com", password = "1234")
     )
 }
