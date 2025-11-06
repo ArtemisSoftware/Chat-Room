@@ -6,6 +6,8 @@ sealed interface DataError : CRError {
         data class Error(val message: String? = "Unknown error") : FirebaseError()
         data object NoUserFound : FirebaseError()
         data object UnableToSubscribe: FirebaseError()
+        data object UnableToSendMessage: FirebaseError()
+        data object UnableToGenerateMessage: FirebaseError()
     }
 
     sealed class SupabaseError : DataError {

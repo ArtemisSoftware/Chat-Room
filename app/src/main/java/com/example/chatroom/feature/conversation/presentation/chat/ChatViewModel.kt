@@ -5,9 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.chatroom.core.presentation.util.extensions.toText
-import com.example.chatroom.domain.SendMessageUseCase
+import com.example.chatroom.feature.conversation.domain.usecase.SendMessageUseCase
 import com.example.chatroom.feature.conversation.domain.repository.ChannelRepository
-import com.example.chatroom.domain.repository.ChatRepository
+import com.example.chatroom.feature.conversation.domain.repository.ChatRepository
 import com.example.chatroom.feature.conversation.domain.usecase.RegisterToChannelUseCase
 import com.example.chatroom.feature.conversation.presentation.navigation.ConversationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel

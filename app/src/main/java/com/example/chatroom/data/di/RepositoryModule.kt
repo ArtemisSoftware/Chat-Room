@@ -1,11 +1,11 @@
 package com.example.chatroom.data.di
 
 import android.content.Context
-import com.example.chatroom.data.repository.ChatRepositoryImpl
+import com.example.chatroom.feature.conversation.data.repository.ChatRepositoryImpl
 import com.example.chatroom.data.repository.FirebaseImageRepositoryImpl
 import com.example.chatroom.data.repository.NotificationRepositoryImpl
 import com.example.chatroom.data.repository.SupabaseImageRepositoryImpl
-import com.example.chatroom.domain.repository.ChatRepository
+import com.example.chatroom.feature.conversation.domain.repository.ChatRepository
 import com.example.chatroom.domain.repository.ImageRepository
 import com.example.chatroom.domain.repository.NotificationRepository
 import dagger.Module
@@ -23,11 +23,7 @@ object RepositoryModule {
 
 
 
-    @Provides
-    @Singleton
-    fun provideChatRepository(): ChatRepository {
-        return ChatRepositoryImpl()
-    }
+
 
     @Provides
     @Singleton

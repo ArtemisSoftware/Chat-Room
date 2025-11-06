@@ -12,5 +12,7 @@ fun CRError.toText(): String {
         DataError.FirebaseError.UnableToSubscribe ->"Unable To Subscribe"
         is DataError.SupabaseError.Error -> message!!
         DataError.SupabaseError.UnableToOpenStream -> "Unable To Open Stream"
+        DataError.FirebaseError.UnableToGenerateMessage -> "Unable To Generate Message"
+        DataError.FirebaseError.UnableToSendMessage -> "Unable To Send Message"
     }
 }

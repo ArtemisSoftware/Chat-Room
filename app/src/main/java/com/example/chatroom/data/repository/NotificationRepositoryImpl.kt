@@ -8,7 +8,7 @@ import com.android.volley.toolbox.Volley
 import com.example.chatroom.R
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
-import com.example.chatroom.data.constants.FcmConstant.FCM_URL
+import com.example.chatroom.firebase.constants.FcmConstant.FCM_URL
 import com.example.chatroom.domain.repository.NotificationRepository
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.messaging.FirebaseMessaging

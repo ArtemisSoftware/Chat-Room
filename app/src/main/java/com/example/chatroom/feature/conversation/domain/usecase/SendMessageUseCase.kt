@@ -1,10 +1,11 @@
-package com.example.chatroom.domain
+package com.example.chatroom.feature.conversation.domain.usecase
 
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
-import com.example.chatroom.domain.repository.ChatRepository
 import com.example.chatroom.domain.repository.ImageRepository
 import com.example.chatroom.domain.repository.NotificationRepository
+import com.example.chatroom.feature.conversation.domain.models.RegistrationData
+import com.example.chatroom.feature.conversation.domain.repository.ChatRepository
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -16,8 +17,9 @@ class SendMessageUseCase @Inject constructor(
     suspend operator fun invoke(
         channelId: String,
         text: String? = null,
-        imageUri: String? = null
-    ): Resource<Unit>{
+        imageUri: String? = null,
+        registrationData: RegistrationData
+    ): Resource<Unit> {
 
         val result = when{
             imageUri != null -> {
@@ -35,42 +37,36 @@ class SendMessageUseCase @Inject constructor(
         when(result){
             is Resource.Failure -> Unit
             is Resource.Success -> {
-                notificationRepository
-                    .postNotificationToUsers(
-                        channelId = channelId,
-                        senderName = "",
-                        messageContent = ""
-                    )
+                if(registrationData.isSubscribedForNotifications){
+                    notificationRepository
+                        .postNotificationToUsers(
+                            channelId = channelId,
+                            senderName = "",
+                            messageContent = ""
+                        )
+                }
             }
         }
 
         return result
     }
 
-    private suspend fun sendImage(channelId: String, imageUri: String): Resource<Unit>{
+    private suspend fun sendImage(channelId: String, imageUri: String): Resource<Unit> {
         val result = imageRepository.storeImage(imageUri)
 
-        when(result){
+        return when(result){
             is Resource.Failure -> {
-
+                Resource.Failure(result.error)
             }
             is Resource.Success -> {
-                chatRepository
+                 chatRepository
                     .sendImage(channelId = channelId, image = result.data)
             }
         }
-
-        //TODO: provisorio
-
-        return Resource.Success(Unit)
     }
 
-    private suspend fun sendText(channelId: String, text: String): Resource<Unit>{
-        chatRepository
+    private suspend fun sendText(channelId: String, text: String): Resource<Unit> {
+        return chatRepository
             .sendMessage(channelId = channelId, text = text)
-
-        //TODO: provisorio
-
-        return Resource.Success(Unit)
     }
 }
