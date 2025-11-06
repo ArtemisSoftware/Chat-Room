@@ -1,4 +1,4 @@
-package com.example.chatroom.firebase.models
+package com.example.chatroom.firebase.data.models
 
 data class MessageFb(
     val id: String,

@@ -2,8 +2,8 @@ package com.example.chatroom.feature.conversation.data.repository
 
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
-import com.example.chatroom.firebase.models.MessageFb
-import com.example.chatroom.data.mapper.toMessage
+import com.example.chatroom.firebase.data.models.MessageFb
+import com.example.chatroom.feature.conversation.data.mapper.toMessage
 import com.example.chatroom.domain.models.Message
 import com.example.chatroom.feature.conversation.domain.repository.ChatRepository
 import com.google.firebase.auth.FirebaseAuth

@@ -1,6 +1,6 @@
-package com.example.chatroom.data.mapper
+package com.example.chatroom.feature.conversation.data.mapper
 
-import com.example.chatroom.firebase.models.MessageFb
+import com.example.chatroom.firebase.data.models.MessageFb
 import com.example.chatroom.domain.models.Message
 
 internal fun MessageFb.toMessage(isMyMessage: Boolean): Message {

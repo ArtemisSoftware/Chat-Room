@@ -1,10 +1,10 @@
-package com.example.chatroom.data.repository
+package com.example.chatroom.core.data.repository
 
 import android.content.Context
 import androidx.core.net.toUri
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
-import com.example.chatroom.domain.repository.ImageRepository
+import com.example.chatroom.core.domain.repository.ImageRepository
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.storage.storage
 import java.util.UUID

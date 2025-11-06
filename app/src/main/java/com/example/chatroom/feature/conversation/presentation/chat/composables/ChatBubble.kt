@@ -32,12 +32,6 @@ internal fun ChatBubble(
     modifier: Modifier = Modifier
 ) {
 
-    val model = ImageRequest.Builder(LocalContext.current)
-        .data(message.imageUrl)
-        .placeholder(R.drawable.ic_launcher_foreground)
-        .crossfade(true)
-        .build()
-
     val alignment = if (!message.isMyMessage) Alignment.CenterStart else Alignment.CenterEnd
 
     Box(
@@ -65,27 +59,53 @@ internal fun ChatBubble(
                         shape = RoundedCornerShape(8.dp)
                     )
             ) {
-                message.imageUrl?.let {
-                    AsyncImage(
-                        model = model,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(12.dp)
-                            .clip( RoundedCornerShape(4.dp))
-                            .size(200.dp),
-                        contentScale = ContentScale.Crop
-                    )
-                } ?: run {
-                    Text(
-                        text = message.message,
-                        color = Color.White,
-                        modifier = Modifier.padding(12.dp)
-                    )
+                when(message){
+                    is Message.Image -> {
+                        ImageMessage(message = message)
+                    }
+                    is Message.Text -> {
+                        TextMessage(message = message)
+                    }
                 }
             }
         }
     }
 }
+
+@Composable
+private fun TextMessage(
+    message: Message.Text,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = message.text,
+        color = Color.White,
+        modifier = modifier.padding(12.dp)
+    )
+}
+
+@Composable
+private fun ImageMessage(
+    message: Message.Image,
+    modifier: Modifier = Modifier
+) {
+    val model = ImageRequest.Builder(LocalContext.current)
+        .data(message.imageUrl)
+        .placeholder(R.drawable.ic_launcher_foreground)
+        .crossfade(true)
+        .build()
+
+    AsyncImage(
+        model = model,
+        contentDescription = null,
+        modifier = modifier
+            .padding(12.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .size(200.dp),
+        contentScale = ContentScale.Crop
+    )
+}
+
 
 @Preview(showBackground = true)
 @Composable
@@ -93,14 +113,14 @@ private fun ChatBubble_user_Preview() {
     ChatRoomTheme {
         ChatBubble(
             modifier = Modifier.fillMaxWidth(),
-            message = Message(
-                id = "2",
-                senderName = "Milo",
-                senderId = "Mi",
-                isMyMessage = true,
-                message = "THe 2 message",
-                createdAt = 2L,
-            )
+            message = Message.Text(
+                itemId = "1",
+                itemSenderName = "Camus",
+                itemSenderId = "ca",
+                itemIsMyMessage = true,
+                text = "THe 1 message",
+                itemCreatedAt = 1L,
+            ),
         )
     }
 }
@@ -111,15 +131,14 @@ private fun ChatBubble_user_image_Preview() {
     ChatRoomTheme {
         ChatBubble(
             modifier = Modifier.fillMaxWidth(),
-            message = Message(
-                id = "2",
-                senderName = "Milo",
-                senderId = "Mi",
-                isMyMessage = true,
-                message = "",
-                imageUrl = "http://image.jpeg",
-                createdAt = 2L,
-            )
+            message = Message.Image(
+                itemId = "1",
+                itemSenderName = "Camus",
+                itemSenderId = "ca",
+                itemIsMyMessage = true,
+                itemCreatedAt = 1L,
+                imageUrl = "https://picsum.photos/200/300"
+            ),
         )
     }
 }
@@ -130,13 +149,13 @@ private fun ChatBubble_other_user_Preview() {
     ChatRoomTheme {
         ChatBubble(
             modifier = Modifier.fillMaxWidth(),
-            message = Message(
-                id = "2",
-                senderName = "Milo",
-                senderId = "Mi",
-                isMyMessage = false,
-                message = "THe 2 message",
-                createdAt = 2L,
+            message = Message.Text(
+                itemId = "1",
+                itemSenderName = "Milo",
+                itemSenderId = "Mi",
+                itemIsMyMessage = false,
+                text = "THe 1 message",
+                itemCreatedAt = 1L,
             )
         )
     }

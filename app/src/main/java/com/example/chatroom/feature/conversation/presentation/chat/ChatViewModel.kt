@@ -43,7 +43,7 @@ class ChatViewModel @Inject constructor(
         val channelName = savedStateHandle.get<String>(ConversationRoute.Chat::channelName.name)
         channelId = savedStateHandle.get<String>(ConversationRoute.Chat::channelId.name).orEmpty()
 
-        update { it.copy(channelName = channelName.orEmpty(),) }
+        update { it.copy(channelName = channelName.orEmpty()) }
     }
 
     fun onTriggerEvent(event: ChatEvent){
@@ -88,10 +88,11 @@ class ChatViewModel @Inject constructor(
                 .invoke(
                     channelId = channelId,
                     text = text,
-                    imageUri = imageUri
+                    imageUri = imageUri,
+                    registrationData = registerData,
                 )
 
-            _state.update { it.copy() }
+            _state.update { it.copy(text = null, imageUri = null) }
         }
     }
 

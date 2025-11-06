@@ -1,13 +1,11 @@
-package com.example.chatroom.data.di
+package com.example.chatroom.core.data.di
 
 import android.content.Context
-import com.example.chatroom.feature.conversation.data.repository.ChatRepositoryImpl
-import com.example.chatroom.data.repository.FirebaseImageRepositoryImpl
-import com.example.chatroom.data.repository.NotificationRepositoryImpl
-import com.example.chatroom.data.repository.SupabaseImageRepositoryImpl
-import com.example.chatroom.feature.conversation.domain.repository.ChatRepository
-import com.example.chatroom.domain.repository.ImageRepository
-import com.example.chatroom.domain.repository.NotificationRepository
+import com.example.chatroom.core.data.repository.FirebaseImageRepositoryImpl
+import com.example.chatroom.core.data.repository.SupabaseImageRepositoryImpl
+import com.example.chatroom.core.domain.repository.ImageRepository
+import com.example.chatroom.notifications.data.repository.NotificationRepositoryImpl
+import com.example.chatroom.notifications.domain.repository.NotificationRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,10 +18,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
-
-
-
-
 
     @Provides
     @Singleton

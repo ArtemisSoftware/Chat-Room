@@ -1,6 +1,6 @@
-package com.example.chatroom.firebase.di
+package com.example.chatroom.firebase.data.di
 
-import com.example.chatroom.firebase.constants.FirebaseConstant
+import com.example.chatroom.firebase.data.constants.FirebaseConstant
 import com.google.firebase.Firebase
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database

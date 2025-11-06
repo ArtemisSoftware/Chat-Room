@@ -183,29 +183,29 @@ private fun ChatContentPreview() {
             state = ChatState(
                 channelName = "The channel",
                 messages = listOf(
-                    Message(
-                        id = "1",
-                        senderName = "Camus",
-                        senderId = "ca",
-                        isMyMessage = false,
-                        message = "THe 1 message",
-                        createdAt = 1L,
+                    Message.Text(
+                        itemId = "1",
+                        itemSenderName = "Camus",
+                        itemSenderId = "ca",
+                        itemIsMyMessage = false,
+                        text = "THe 1 message",
+                        itemCreatedAt = 1L,
                     ),
-                    Message(
-                        id = "2",
-                        senderName = "Milo",
-                        senderId = "Mi",
-                        isMyMessage = true,
-                        message = "THe 2 message",
-                        createdAt = 2L,
+                    Message.Text(
+                        itemId = "2",
+                        itemSenderName = "Milo",
+                        itemSenderId = "Mi",
+                        itemIsMyMessage = true,
+                        text = "THe 2 message",
+                        itemCreatedAt = 2L,
                     ),
-                    Message(
-                        id = "3",
-                        senderName = "Camus",
-                        senderId = "ca",
-                        isMyMessage = false,
-                        message = "THe 3 message",
-                        createdAt = 3L,
+                    Message.Text(
+                        itemId = "3",
+                        itemSenderName = "Camus",
+                        itemSenderId = "ca",
+                        itemIsMyMessage = false,
+                        text = "THe 3 message",
+                        itemCreatedAt = 3L,
                     )
                 ),
             ),

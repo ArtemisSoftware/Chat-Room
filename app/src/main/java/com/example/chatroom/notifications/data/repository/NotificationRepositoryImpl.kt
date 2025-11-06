@@ -1,4 +1,4 @@
-package com.example.chatroom.data.repository
+package com.example.chatroom.notifications.data.repository
 
 import android.content.Context
 import android.util.Log
@@ -8,8 +8,9 @@ import com.android.volley.toolbox.Volley
 import com.example.chatroom.R
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
-import com.example.chatroom.firebase.constants.FcmConstant.FCM_URL
-import com.example.chatroom.domain.repository.NotificationRepository
+import com.example.chatroom.firebase.data.constants.FcmConstant
+import com.example.chatroom.firebase.data.constants.FirebaseConstant.SCOPES
+import com.example.chatroom.notifications.domain.repository.NotificationRepository
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.messaging.FirebaseMessaging
 import org.json.JSONObject
@@ -55,7 +56,7 @@ class NotificationRepositoryImpl @Inject constructor(
 
         val request = object : StringRequest(
             Method.POST,
-            FCM_URL,
+            FcmConstant.FCM_URL,
             Response.Listener {
                 Log.d("ChatViewModel", "Notification sent successfully")
             },
@@ -82,10 +83,10 @@ class NotificationRepositoryImpl @Inject constructor(
         val inputStream = context.resources.openRawResource(R.raw.chatroom_key)
         val googleCreds = GoogleCredentials
             .fromStream(inputStream)
-            .createScoped(listOf("https://www.googleapis.com/auth/firebase.messaging"))
+            .createScoped(SCOPES)
         return googleCreds.refreshAccessToken().tokenValue
     }
 
-    // TODO: deveria haver um metodo para unsubscribe
+    // TODO: eventually create a method to unsubscribe
 
 }

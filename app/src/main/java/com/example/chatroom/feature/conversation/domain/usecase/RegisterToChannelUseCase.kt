@@ -1,7 +1,7 @@
 package com.example.chatroom.feature.conversation.domain.usecase
 
 import com.example.chatroom.core.domain.Resource
-import com.example.chatroom.domain.repository.NotificationRepository
+import com.example.chatroom.notifications.domain.repository.NotificationRepository
 import com.example.chatroom.feature.conversation.domain.models.RegistrationData
 import com.example.chatroom.feature.conversation.domain.repository.ChannelRepository
 import javax.inject.Inject

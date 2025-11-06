@@ -1,9 +1,9 @@
-package com.example.chatroom.data.repository
+package com.example.chatroom.core.data.repository
 
 import androidx.core.net.toUri
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
-import com.example.chatroom.domain.repository.ImageRepository
+import com.example.chatroom.core.domain.repository.ImageRepository
 import com.google.firebase.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage

@@ -1,6 +1,6 @@
-package com.example.chatroom.data.di
+package com.example.chatroom.database.supabase.data.di
 
-import com.example.chatroom.data.constants.SupabaseConstant
+import com.example.chatroom.database.supabase.constants.SupabaseConstant
 import com.example.chatroom.feature.authentication.data.repository.AuthenticationRepositoryImpl
 import com.example.chatroom.feature.authentication.domain.repository.AuthenticationRepository
 import dagger.Module
