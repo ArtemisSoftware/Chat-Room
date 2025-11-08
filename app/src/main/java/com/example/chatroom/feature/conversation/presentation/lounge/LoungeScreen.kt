@@ -31,7 +31,7 @@ import com.example.chatroom.MainActivity
 import com.example.chatroom.R
 import com.example.chatroom.data.constants.ZegoConstant.AppID
 import com.example.chatroom.data.constants.ZegoConstant.AppSign
-import com.example.chatroom.domain.models.Channel
+import com.example.chatroom.feature.conversation.domain.models.Channel
 import com.example.chatroom.feature.conversation.presentation.lounge.composables.AddChannelDialog
 import com.example.chatroom.feature.conversation.presentation.lounge.composables.ChannelCard
 import com.example.chatroom.ui.theme.ChatRoomTheme

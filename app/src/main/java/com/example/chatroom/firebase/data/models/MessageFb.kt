@@ -1,7 +1,7 @@
 package com.example.chatroom.firebase.data.models
 
 data class MessageFb(
-    val id: String,
+    val id: String = "",
     val senderId: String = "",
     val senderName: String = "",
     val senderImage: String? = null,

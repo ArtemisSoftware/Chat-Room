@@ -35,3 +35,17 @@ val ChatBackgroundColors = listOf(
     ChatBackgroundColor2,
     ChatBackgroundColor1
 )
+
+val UserIconColors = listOf(
+    Color(0xFF8E44AD), // Purple
+    Color(0xFF1ABC9C), // Teal
+    Color(0xFFE67E22), // Amber / Warm Orange
+    Color(0xFF2ECC71), // Emerald Green
+    Color(0xFF3498DB)  // Soft Blue
+)
+
+val IconColors = listOf(Red, Green, Blue, Yellow, Orange, Cyan)
+
+
+val MyBubbleColor = Color(0xFF0A84FF)
+val OtherBubbleColor = Color(0xFF274690)

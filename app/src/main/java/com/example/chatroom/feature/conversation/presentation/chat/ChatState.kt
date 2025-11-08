@@ -1,6 +1,6 @@
 package com.example.chatroom.feature.conversation.presentation.chat
 
-import com.example.chatroom.domain.models.Message
+import com.example.chatroom.feature.conversation.domain.models.Message
 import com.example.chatroom.feature.conversation.domain.models.RegistrationData
 
 data class ChatState(

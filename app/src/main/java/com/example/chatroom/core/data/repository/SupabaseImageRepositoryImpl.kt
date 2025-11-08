@@ -17,11 +17,26 @@ class SupabaseImageRepositoryImpl(
         try {
             val fileUri = uri.toUri()
 
-            val extension = fileUri.path?.substringAfterLast(".") ?: "jpg"
+            val extension = fileUri
+                .path
+                ?.substringAfterLast(".") ?: "jpg"
+
             val fileName = "${UUID.randomUUID()}.$extension"
-            val inputStream = context.contentResolver.openInputStream(fileUri) ?: return Resource.Failure(DataError.SupabaseError.UnableToOpenStream)
-            supabaseClient.storage.from(BUCKET_NAME).upload(fileName, inputStream.readBytes())
-            val publicUrl = supabaseClient.storage.from(BUCKET_NAME).publicUrl(fileName)
+
+            val inputStream = context
+                .contentResolver
+                .openInputStream(fileUri) ?: return Resource.Failure(DataError.SupabaseError.UnableToOpenStream)
+
+            supabaseClient
+                .storage
+                .from(BUCKET_NAME)
+                .upload(fileName, inputStream.readBytes())
+
+            val publicUrl = supabaseClient
+                .storage
+                .from(BUCKET_NAME)
+                .publicUrl(fileName)
+
             return  Resource.Success(publicUrl)
         } catch (e: Exception) {
             return Resource.Failure(DataError.SupabaseError.Error(e.message))

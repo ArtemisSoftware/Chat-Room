@@ -20,7 +20,10 @@ class CRMessagingService @Inject constructor(
 
     override fun onMessageReceived(message: RemoteMessage) {
         message.notification?.let {
-            showNotification(it.title, it.body)
+
+            if(it.body != firebaseAuth.currentUser?.displayName) {
+                showNotification(it.title)
+            }
         }
     }
 
@@ -29,11 +32,8 @@ class CRMessagingService @Inject constructor(
         Log.d("CRMessagingService", "New FCM Token: $token")
     }
 
-    fun showNotification(title: String?, message: String?) {
+    fun showNotification(title: String?) {
 
-        firebaseAuth.currentUser?.let {
-            if(title?.contains(it.displayName.toString()) == true || message?.contains(it.displayName.toString()) == true) return
-        }
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         val channel = NotificationChannel(
@@ -50,7 +50,7 @@ class CRMessagingService @Inject constructor(
             FirebaseConstant.Messaging.CHANNEL_ID
             )
             .setContentTitle(title)
-            .setContentText(message)
+            //.setContentText(message)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .build()
 

@@ -16,6 +16,7 @@ class SendMessageUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         channelId: String,
+        channelName: String,
         text: String? = null,
         imageUri: String? = null,
         registrationData: RegistrationData
@@ -41,6 +42,7 @@ class SendMessageUseCase @Inject constructor(
                     notificationRepository
                         .postNotificationToUsers(
                             channelId = channelId,
+                            channelName = channelName,
                             senderName = "",
                             messageContent = ""
                         )

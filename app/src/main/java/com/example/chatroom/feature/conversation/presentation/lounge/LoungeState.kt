@@ -1,6 +1,6 @@
 package com.example.chatroom.feature.conversation.presentation.lounge
 
-import com.example.chatroom.domain.models.Channel
+import com.example.chatroom.feature.conversation.domain.models.Channel
 
 data class LoungeState(
     val isLoading: Boolean = false,

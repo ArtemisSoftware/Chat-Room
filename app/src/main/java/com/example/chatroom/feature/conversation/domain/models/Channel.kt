@@ -1,7 +1,7 @@
-package com.example.chatroom.domain.models
+package com.example.chatroom.feature.conversation.domain.models
 
 data class Channel(
-    val id: String = "",
+    val id: String,
     val name: String,
     val createdAt: Long = System.currentTimeMillis()
 )

@@ -2,7 +2,7 @@ package com.example.chatroom.feature.conversation.data.repository
 
 import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
-import com.example.chatroom.domain.models.Channel
+import com.example.chatroom.feature.conversation.domain.models.Channel
 import com.example.chatroom.feature.conversation.domain.repository.ChannelRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot

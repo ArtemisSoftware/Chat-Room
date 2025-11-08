@@ -34,7 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.chatroom.R
 import com.example.chatroom.core.presentation.composables.dialog.ContentSelectionDialog
-import com.example.chatroom.domain.models.Message
+import com.example.chatroom.feature.conversation.domain.models.Message
 import com.example.chatroom.feature.conversation.presentation.chat.composables.CallButton
 import com.example.chatroom.feature.conversation.presentation.chat.composables.CallType
 import com.example.chatroom.feature.conversation.presentation.chat.composables.ChatBubble

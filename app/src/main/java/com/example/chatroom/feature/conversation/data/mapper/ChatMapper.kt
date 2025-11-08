@@ -1,9 +1,11 @@
 package com.example.chatroom.feature.conversation.data.mapper
 
 import com.example.chatroom.firebase.data.models.MessageFb
-import com.example.chatroom.domain.models.Message
+import com.example.chatroom.feature.conversation.domain.models.Message
 
-internal fun MessageFb.toMessage(isMyMessage: Boolean): Message {
+internal fun MessageFb.toMessage(isMyMessage: Boolean, lastSender: String): Message {
+    val sameSender = lastSender == senderName
+
     return if(imageUrl != null) {
         Message.Image(
             itemId = id,
@@ -13,6 +15,7 @@ internal fun MessageFb.toMessage(isMyMessage: Boolean): Message {
             itemCreatedAt = createdAt,
             itemSenderName = senderName,
             itemSenderImage = senderImage,
+            itemIsSameSender = sameSender
         )
     } else {
         Message.Text(
@@ -23,6 +26,7 @@ internal fun MessageFb.toMessage(isMyMessage: Boolean): Message {
             itemCreatedAt = createdAt,
             itemSenderName = senderName,
             itemSenderImage = senderImage,
+            itemIsSameSender = sameSender
         )
     }
 }

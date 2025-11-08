@@ -35,10 +35,4 @@ object RepositoryModule {
     ): ImageRepository {
         return SupabaseImageRepositoryImpl(context = context, supabaseClient = supabaseClient)
     }
-
-    @Provides
-    @Singleton
-    fun provideNotificationRepository(@ApplicationContext context: Context): NotificationRepository {
-        return NotificationRepositoryImpl(context = context)
-    }
 }

@@ -87,6 +87,7 @@ class ChatViewModel @Inject constructor(
             sendMessageUseCase
                 .invoke(
                     channelId = channelId,
+                    channelName = channelName,
                     text = text,
                     imageUri = imageUri,
                     registrationData = registerData,

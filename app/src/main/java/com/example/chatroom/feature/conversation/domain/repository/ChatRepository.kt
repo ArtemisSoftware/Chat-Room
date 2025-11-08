@@ -1,7 +1,7 @@
 package com.example.chatroom.feature.conversation.domain.repository
 
 import com.example.chatroom.core.domain.Resource
-import com.example.chatroom.domain.models.Message
+import com.example.chatroom.feature.conversation.domain.models.Message
 import kotlinx.coroutines.flow.Flow
 
 interface ChatRepository {

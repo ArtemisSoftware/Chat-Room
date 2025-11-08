@@ -4,7 +4,7 @@ import com.example.chatroom.core.domain.Resource
 import com.example.chatroom.core.domain.error.DataError
 import com.example.chatroom.firebase.data.models.MessageFb
 import com.example.chatroom.feature.conversation.data.mapper.toMessage
-import com.example.chatroom.domain.models.Message
+import com.example.chatroom.feature.conversation.domain.models.Message
 import com.example.chatroom.feature.conversation.domain.repository.ChatRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -85,8 +85,9 @@ class ChatRepositoryImpl @Inject constructor(
                     dataSnapshot.children.forEach { data ->
                         val message = data.getValue(MessageFb::class.java)
                         message?.let {
+                            val lastSender = if(messages.isNotEmpty()) messages.last().senderName else ""
                             messages.add(
-                                it.toMessage(isMyMessage = message.senderId == firebaseAuth.currentUser?.uid)
+                                it.toMessage(isMyMessage = message.senderId == firebaseAuth.currentUser?.uid, lastSender = lastSender)
                             )
                         }
                     }

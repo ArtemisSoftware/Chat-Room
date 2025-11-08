@@ -12,6 +12,7 @@ import com.example.chatroom.firebase.data.constants.FcmConstant
 import com.example.chatroom.firebase.data.constants.FirebaseConstant.SCOPES
 import com.example.chatroom.notifications.domain.repository.NotificationRepository
 import com.google.auth.oauth2.GoogleCredentials
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import org.json.JSONObject
 import javax.inject.Inject
@@ -20,7 +21,8 @@ import kotlin.coroutines.suspendCoroutine
 
 class NotificationRepositoryImpl @Inject constructor(
     private val context: Context,
-    private val firebaseMessaging: FirebaseMessaging = FirebaseMessaging.getInstance()
+    private val firebaseMessaging: FirebaseMessaging = FirebaseMessaging.getInstance(),
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ): NotificationRepository {
 
     override suspend fun subscribeForNotification(channelId: String): Resource<Unit> {
@@ -39,6 +41,7 @@ class NotificationRepositoryImpl @Inject constructor(
 
     override fun postNotificationToUsers(
         channelId: String,
+        channelName: String,
         senderName: String,
         messageContent: String
     ) {
@@ -46,8 +49,10 @@ class NotificationRepositoryImpl @Inject constructor(
             put("message", JSONObject().apply {
                 put("topic", "group_$channelId")
                 put("notification", JSONObject().apply {
-                    put("title", "New message in $channelId")
-                    put("body", "$senderName: $messageContent")
+                    put("title", "New message in $channelName")
+                    firebaseAuth.currentUser?.displayName?.let { name ->
+                        put("body", name)
+                    }
                 })
             })
         }
@@ -58,10 +63,10 @@ class NotificationRepositoryImpl @Inject constructor(
             Method.POST,
             FcmConstant.FCM_URL,
             Response.Listener {
-                Log.d("ChatViewModel", "Notification sent successfully")
+                Log.d("Notification", "Notification sent successfully")
             },
             Response.ErrorListener {
-                Log.e("ChatViewModel", "Failed to send notification")
+                Log.e("Notification", "Failed to send notification")
             }
         ) {
             override fun getBody(): ByteArray {
@@ -86,7 +91,5 @@ class NotificationRepositoryImpl @Inject constructor(
             .createScoped(SCOPES)
         return googleCreds.refreshAccessToken().tokenValue
     }
-
-    // TODO: eventually create a method to unsubscribe
 
 }

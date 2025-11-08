@@ -3,6 +3,7 @@ package com.example.chatroom.feature.conversation.presentation.chat.composables
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,7 +23,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.chatroom.R
 import com.example.chatroom.core.presentation.composables.icon.AcronymIcon
-import com.example.chatroom.domain.models.Message
+import com.example.chatroom.feature.conversation.domain.models.Message
 import com.example.chatroom.feature.conversation.presentation.chat.mapper.toColor
 import com.example.chatroom.ui.theme.ChatRoomTheme
 
@@ -36,24 +37,24 @@ internal fun ChatBubble(
 
     Box(
         modifier = modifier
-            .padding(vertical = 0.dp, horizontal = 4.dp)
+            .padding(vertical = 8.dp, horizontal = 16.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .align(alignment),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            if (!message.isMyMessage) {
+            if (!message.isMyMessage && !message.isSameSender) {
                 AcronymIcon(
                     name = message.senderName,
-                    size = 24.dp
+                    useExtended = true,
+                    isUser = true
                 )
             }
 
             Box(
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(start = 16.dp)
                     .background(
                         color = message.toColor(),
                         shape = RoundedCornerShape(8.dp)
@@ -152,6 +153,24 @@ private fun ChatBubble_other_user_Preview() {
             message = Message.Text(
                 itemId = "1",
                 itemSenderName = "Milo",
+                itemSenderId = "Mi",
+                itemIsMyMessage = false,
+                text = "THe 1 message",
+                itemCreatedAt = 1L,
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ChatBubble_repeat_user_Preview() {
+    ChatRoomTheme {
+        ChatBubble(
+            modifier = Modifier.fillMaxWidth(),
+            message = Message.Text(
+                itemId = "1",
+                itemSenderName = "",
                 itemSenderId = "Mi",
                 itemIsMyMessage = false,
                 text = "THe 1 message",

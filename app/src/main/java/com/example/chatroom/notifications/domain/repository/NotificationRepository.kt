@@ -7,6 +7,7 @@ interface NotificationRepository {
 
     fun postNotificationToUsers(
         channelId: String,
+        channelName: String,
         senderName: String,
         messageContent: String
     )
