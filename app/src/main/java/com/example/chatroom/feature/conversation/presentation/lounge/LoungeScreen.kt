@@ -16,9 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -27,35 +25,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.chatroom.MainActivity
 import com.example.chatroom.R
-import com.example.chatroom.data.constants.ZegoConstant.AppID
-import com.example.chatroom.data.constants.ZegoConstant.AppSign
 import com.example.chatroom.feature.conversation.domain.models.Channel
 import com.example.chatroom.feature.conversation.presentation.lounge.composables.AddChannelDialog
 import com.example.chatroom.feature.conversation.presentation.lounge.composables.ChannelCard
 import com.example.chatroom.ui.theme.ChatRoomTheme
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 
 @Composable
 internal fun LoungeScreen(
     navigateToChat: (String, String) -> Unit,
     viewModel: LoungeViewModel = hiltViewModel()
 ) {
-
-    val context = LocalContext.current as MainActivity
-    //TODO: Mudar isto
-    LaunchedEffect(Unit) {
-        Firebase.auth.currentUser?.let {
-            context.initZegoService(
-                appID = AppID,
-                appSign = AppSign,
-                userID = it.email!!,
-                userName = it.email!!
-            )
-        }
-    }
 
     val state = viewModel.state.collectAsStateWithLifecycle().value
 

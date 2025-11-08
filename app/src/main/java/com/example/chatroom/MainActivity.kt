@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -48,7 +47,10 @@ class MainActivity : FragmentActivity() {
                 state.destinationAfterSplash?.let { route ->
                     RootNavGraph(
                         navController = navController,
-                        startDestination = route
+                        startDestination = route,
+                        initZegoService = {
+                            viewModel.initZego(application)
+                        }
                     )
                 }
             }
@@ -56,42 +58,6 @@ class MainActivity : FragmentActivity() {
 
         permissionHandling(this)
         checkNotificationPermission()
-    }
-
-    fun initZegoService(appID: Long, appSign: String, userID: String, userName: String) {
-
-        val callInvitationConfig = ZegoUIKitPrebuiltCallInvitationConfig()
-
-        callInvitationConfig.translationText = ZegoTranslationText(ZegoUIKitLanguage.ENGLISH)
-        callInvitationConfig.provider =
-            ZegoUIKitPrebuiltCallConfigProvider { invitationData: ZegoCallInvitationData? ->
-                ZegoUIKitPrebuiltCallInvitationConfig.generateDefaultConfig(
-                    invitationData
-                )
-            }
-        ZegoUIKitPrebuiltCallService.events.errorEventsListener =
-            ErrorEventsListener { errorCode: Int, message: String ->
-                Log.d("CallEndListener","onError() called with: errorCode = [$errorCode], message = [$message]")
-            }
-        ZegoUIKitPrebuiltCallService.events.invitationEvents.pluginConnectListener =
-            SignalPluginConnectListener {
-                state: ZIMConnectionState,
-                event: ZIMConnectionEvent,
-                extendedData: JSONObject ->
-                Log.d("CallEndListener","onSignalPluginConnectionStateChanged() called with: state = [$state], event = [$event], extendedData = [$extendedData$]")
-            }
-        ZegoUIKitPrebuiltCallService.init(
-            application, appID, appSign, userID, userName, callInvitationConfig
-        )
-        ZegoUIKitPrebuiltCallService.enableFCMPush()
-
-        ZegoUIKitPrebuiltCallService.events.callEvents.callEndListener =
-            CallEndListener { callEndReason: ZegoCallEndReason?, jsonObject: String? ->
-                Log.d(
-                    "CallEndListener",
-                    "Call Ended with reason: $callEndReason and json: $jsonObject"
-                )
-            }
     }
 
     private fun permissionHandling(activityContext: FragmentActivity) {

@@ -12,6 +12,7 @@ import com.example.chatroom.feature.conversation.presentation.navigation.convers
 @Composable
 fun RootNavGraph(
     navController: NavHostController,
+    initZegoService: () -> Unit,
     startDestination: Any = AuthenticationRoute.SignIn,
     modifier: Modifier = Modifier
 ) {
@@ -33,6 +34,7 @@ fun RootNavGraph(
         )
 
         conversationNavGraph(
+            initZegoService = initZegoService,
             navController = navController,
         )
     }

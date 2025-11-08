@@ -89,12 +89,16 @@ private fun ChatContent(
                             fontSize = 20.sp,
                             overflow = TextOverflow.Ellipsis
                         )
-                        Text(
-                            text = (state.participants.size + 1).toString() + " " + stringResource(R.string.participants),
-                            maxLines = 1,
-                            fontSize = 14.sp,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                        if(state.participants.size + 1 > 1) {
+                            Text(
+                                text = (state.participants.size + 1).toString() + " " + stringResource(
+                                    R.string.participants
+                                ),
+                                maxLines = 1,
+                                fontSize = 14.sp,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
                 },
                 navigationIcon = {
@@ -106,21 +110,23 @@ private fun ChatContent(
                     }
                 },
                 actions = {
-                    CallButton(
-                        callType = CallType.AUDIO,
-                        onClick = { callButton->
-                            val zegoUIKitUsers = state.participants.toZegoUIKitUser()
-                            callButton.setInvitees(zegoUIKitUsers)
-                        }
-                    )
+                    if(state.participants.size + 1 > 1) {
+                        CallButton(
+                            callType = CallType.AUDIO,
+                            onClick = { callButton ->
+                                val zegoUIKitUsers = state.participants.toZegoUIKitUser()
+                                callButton.setInvitees(zegoUIKitUsers)
+                            }
+                        )
 
-                    CallButton(
-                        callType = CallType.VIDEO,
-                        onClick = { callButton->
-                            val zegoUIKitUsers = state.participants.toZegoUIKitUser()
-                            callButton.setInvitees(zegoUIKitUsers)
-                        }
-                    )
+                        CallButton(
+                            callType = CallType.VIDEO,
+                            onClick = { callButton ->
+                                val zegoUIKitUsers = state.participants.toZegoUIKitUser()
+                                callButton.setInvitees(zegoUIKitUsers)
+                            }
+                        )
+                    }
                 },
             )
         }

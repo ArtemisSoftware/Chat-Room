@@ -1,10 +1,14 @@
 package com.example.chatroom
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.chatroom.zego.ZegoUtil
 import com.example.chatroom.feature.authentication.domain.repository.AuthenticationRepository
 import com.example.chatroom.feature.authentication.presentation.navigation.AuthenticationRoute
 import com.example.chatroom.feature.conversation.presentation.navigation.ConversationRoute
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,6 +36,16 @@ class MainViewModel @Inject constructor(
                     val route = if (isLoggedIn) ConversationRoute.Lounge else AuthenticationRoute.SignIn
                     update { it.copy(destinationAfterSplash = route) }
                 }
+        }
+    }
+
+    fun initZego(application: Application){
+        Firebase.auth.currentUser?.email?.let { email ->
+            ZegoUtil.initZegoService(
+                application = application,
+                userID = email,
+                userName = email
+            )
         }
     }
 }
