@@ -47,6 +47,6 @@ It supports **text and image messages**, **voice/video calls**, and **real-time 
  
 ## Screenshots
 
-Image #1            |             Image #2              |             Image #3              |  Image #4            
-:-------------------------:|:---------------------------------:|:---------------------------------:|:----------------------------:
-<img src="images/ChatRoom_1.png">    | <img src="images/ChatRoom_2.png"> | <img src="images/ChatRoom_3.png"> |  <img src="images/ChatRoom_4.png"> 
+|             Image #1              |             Image #2              |             Image #3              |             Image #4              |
+|:---------------------------------:|:---------------------------------:|:---------------------------------:|:---------------------------------:|
+| <img src="images/ChatRoom_1.png"> | <img src="images/ChatRoom_2.png"> | <img src="images/ChatRoom_3.png"> | <img src="images/ChatRoom_4.png"> |
