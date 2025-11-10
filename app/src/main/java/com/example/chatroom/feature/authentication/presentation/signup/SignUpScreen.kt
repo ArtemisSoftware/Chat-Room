@@ -117,30 +117,42 @@ private fun SignUpContent(
                     CircularProgressIndicator()
                 }
                 state.error != null -> {
+
+                    Options(event, state, navigateToSignIn)
+
                     ErrorDisplay(
                         modifier = Modifier.fillMaxWidth(.9F),
                         message = state.error
                     )
                 }
                 else -> {
-                    Button(
-                        onClick = { event(SignUpEvent.SignUp) },
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = state.hasValidCredentials(),
-                        content = {
-                            Text(text = stringResource(R.string.sign_up))
-                        }
-                    )
-                    TextButton(
-                        onClick = navigateToSignIn,
-                        content = {
-                            Text(text = stringResource(R.string.already_have_an_account_sign_in))
-                        }
-                    )
+                    Options(event, state, navigateToSignIn)
                 }
             }
         }
     }
+}
+
+@Composable
+private fun Options(
+    event: (SignUpEvent) -> Unit,
+    state: SignUpState,
+    navigateToSignIn: () -> Unit
+) {
+    Button(
+        onClick = { event(SignUpEvent.SignUp) },
+        modifier = Modifier.fillMaxWidth(),
+        enabled = state.hasValidCredentials(),
+        content = {
+            Text(text = stringResource(R.string.sign_up))
+        }
+    )
+    TextButton(
+        onClick = navigateToSignIn,
+        content = {
+            Text(text = stringResource(R.string.already_have_an_account_sign_in))
+        }
+    )
 }
 
 @Preview(showBackground = true)

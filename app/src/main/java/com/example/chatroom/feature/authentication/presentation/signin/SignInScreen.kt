@@ -103,28 +103,38 @@ private fun SignInContent(
                     CircularProgressIndicator()
                 }
                 state.error != null -> {
+                    Options(event, state, navigateToSingUp)
                     ErrorDisplay(
                         modifier = Modifier.fillMaxWidth(.9F),
                         message = state.error
                     )
                 }
                 else -> {
-                    Button(
-                        onClick = { event(SignInEvent.SignIn) },
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = state.hasValidCredentials()
-                    ) {
-                        Text(text = stringResource(R.string.sign_in))
-                    }
-
-                    TextButton(
-                        onClick = navigateToSingUp
-                    ) {
-                        Text(text = stringResource(R.string.don_t_have_an_account_sign_up))
-                    }
+                    Options(event, state, navigateToSingUp)
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun Options(
+    event: (SignInEvent) -> Unit,
+    state: SignInState,
+    navigateToSingUp: () -> Unit
+) {
+    Button(
+        onClick = { event(SignInEvent.SignIn) },
+        modifier = Modifier.fillMaxWidth(),
+        enabled = state.hasValidCredentials()
+    ) {
+        Text(text = stringResource(R.string.sign_in))
+    }
+
+    TextButton(
+        onClick = navigateToSingUp
+    ) {
+        Text(text = stringResource(R.string.don_t_have_an_account_sign_up))
     }
 }
 
