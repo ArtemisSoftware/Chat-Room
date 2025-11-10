@@ -22,6 +22,26 @@ It supports **text and image messages**, **voice/video calls**, and **real-time 
 - 📞 **Voice and Video Calls**
   - Integrated with **ZEGOCLOUD UIKit** for 1-to-1 and group **audio/video calls**.
  
+
+## 🧩 Tech Stack and Libraries
+
+| Purpose | Library |
+|----------|----------|
+| **UI** | Jetpack Compose, Material 3 |
+| **Dependency Injection** | Dagger Hilt (`hilt-android`, `hilt-navigation-compose`) |
+| **Image Loading** | Coil (`io.coil-kt:coil-compose`) |
+| **Navigation** | Navigation Compose |
+| **State Management** | ViewModel + LiveData (Lifecycle Runtime KTX) |
+| **Networking** | Ktor Client, Volley |
+| **Authentication & Database** | Firebase Authentication, Firebase Realtime Database |
+| **Storage** | Firebase Storage, Supabase Storage |
+| **Notifications** | Firebase Cloud Messaging (FCM) |
+| **Voice & Video Calls** | ZEGOCLOUD UIKit (`zego_uikit_prebuilt_call_android`) |
+| **Permissions** | PermissionX |
+| **JSON Serialization** | Kotlinx Serialization |
+| **Testing** | JUnit, Espresso, Compose UI Test |
+
+ 
   ## Screenshots
 
 Image #1            |               Image #2               |               Image #3               |  Image #4            
